@@ -5,13 +5,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const SettingsPage = () => {
-    // const { selectedSolfege, setSelectedSolfege, selectedSolfegeIndex, setSelectedSolfegeIndex, solfegeType, setSolfegeType } = useContext(AppContext);
+    const { selectedSolfege, setSelectedSolfege, selectedSolfegeIndex, setSelectedSolfegeIndex, solfegeType, setSolfegeType } = useContext(AppContext);
 
-    const [selectedSolfege, setSelectedSolfege] = useState([]);
-    const [selectedSolfegeIndex, setSelectedSolfegeIndex] = useState([]);
-    const [solfegeType, setSolfegeType] = useState(0); // 0 for Do-Di-Re-Ri, 1 for Do-Ra-Re-Me
+    // const [selectedSolfege, setSelectedSolfege] = useState([]);
+    // const [selectedSolfegeIndex, setSelectedSolfegeIndex] = useState([]);
+    // const [solfegeType, setSolfegeType] = useState(0); // 0 for Do-Di-Re-Ri, 1 for Do-Ra-Re-Me
 
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const solfege = solfegeType === 0
         ? ['Do', 'Di', 'Re', 'Ri', 'Mi', 'Fa', 'Fi', 'So', 'Si', 'La', 'Li', 'Ti']
@@ -35,9 +35,9 @@ const SettingsPage = () => {
         setSolfegeType((prevType) => (prevType === 0 ? 1 : 0));
     };
 
-    // const handleStartTraining = () => {
-    //     navigate('/start-training', { state: { selectedSolfege, solfegeType } });
-    // };
+    const handleStartTraining = () => {
+        navigate('/start-training', { state: { selectedSolfege, solfegeType } });
+    };
 
     return (
         <div>
@@ -64,11 +64,11 @@ const SettingsPage = () => {
             <button onClick={toggleSolfegeType} style={{marginTop: '16px'}}>
                 {solfegeType === 0 ? 'Use Do-Ra-Re-Me' : 'Use Do-Di-Re-Ri'}
             </button>
-            {/*<button onClick={handleStartTraining} style={{marginTop: '16px'}}>*/}
-            {/*    Start Training*/}
-            {/*</button>*/}
             <h3>{"debug selectedSolfege:" + selectedSolfege}</h3>
             <h3>{"debug selectedSolfegeIndex:" + selectedSolfegeIndex}</h3>
+            <button onClick={handleStartTraining} style={{marginTop: '16px'}}>
+                Start Training
+            </button>
         </div>
     );
 };

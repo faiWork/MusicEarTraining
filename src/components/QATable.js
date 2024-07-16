@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
+import {AppContext} from "../App";
 
-const QATable = () => {
-    const [questions, setQuestions] = useState([]);
+const QATable = ({ title, initialQuestions = [] }) => {
+
+    const [questions, setQuestions] = useState(initialQuestions);
     const [newQuestion, setNewQuestion] = useState('');
     const [newAnswer, setNewAnswer] = useState('');
+
+    useEffect(() => {
+        setQuestions(initialQuestions);
+    }, [initialQuestions]);
 
     const addQA = () => {
         if (newQuestion.trim() !== '' && newAnswer.trim() !== '') {
@@ -21,46 +27,22 @@ const QATable = () => {
 
     return (
         <div>
-            <h2>Question and Answer Table</h2>
+            <h2>{title}</h2>
             <table>
                 <thead>
                 <tr>
                     <th>Setting</th>
                     <th>Choice</th>
-                    <th>Actions</th>
+                    {/*<th>Actions</th>*/}
                 </tr>
                 </thead>
                 <tbody>
                 {questions.map((qa, index) => (
                     <tr key={index}>
-                        <td>{qa.question}</td>
-                        <td>{qa.answer}</td>
-                        <td>
-                            <button onClick={() => removeQA(index)}>Remove</button>
-                        </td>
+                        <td style={{ verticalAlign: 'top' }}>{qa.question}</td>
+                        <td style={{ verticalAlign: 'top' }}>{qa.answer}</td>
                     </tr>
                 ))}
-                <tr>
-                    <td>
-                        <input
-                            type="text"
-                            value={newQuestion}
-                            onChange={(e) => setNewQuestion(e.target.value)}
-                            placeholder="Enter a new question"
-                        />
-                    </td>
-                    <td>
-                        <input
-                            type="text"
-                            value={newAnswer}
-                            onChange={(e) => setNewAnswer(e.target.value)}
-                            placeholder="Enter a new answer"
-                        />
-                    </td>
-                    <td>
-                        <button onClick={addQA}>Add</button>
-                    </td>
-                </tr>
                 </tbody>
             </table>
         </div>

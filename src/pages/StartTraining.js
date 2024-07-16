@@ -5,7 +5,6 @@ import { AppContext } from "../App";
 import Layout from "../components/Layout";
 
 const StartTraining = () => {
-  const { selectedSolfegeIndex, accidentalsType } = useContext(AppContext);
 
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -19,10 +18,10 @@ const StartTraining = () => {
       <div>
         <h2>Start Training</h2>
         {/* Add your training logic here */}
-        <p>Selected solfege Index: {state.selectedSolfegeIndex.join(", ")}</p>
+        <p>Selected note Index: {state.selectedNoteIndex.join(", ")}</p>
         <p>
           Solfege type:{" "}
-          {state.accidentalsType}
+          {state.selectedAccidentalsType}
         </p>
         <button onClick={handleBack}>Back</button>
       </div>

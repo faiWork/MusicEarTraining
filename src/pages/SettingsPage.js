@@ -10,111 +10,96 @@ import QATable from '../components/QATable';
 
 const SettingsPage = () => {
   const {
-    selectedSolfegeIndex,
-    setSelectedSolfegeIndex,
-      accidentalsType,
-    setAccidentalsType,
+    selectedNoteIndex,
+    setSelectedNoteIndex,
+    selectedAccidentalsType,
+    setSelectedAccidentalsType,
   } = useContext(AppContext);
 
   const navigate = useNavigate();
 
-  const solfege =
-      accidentalsType === "sharp"
-      ? noteData.solfegeSharpName
-      : noteData.solfegeFlatName;
+  const noteChoiceIndex = [-12, -11, -10, -9 -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
-  const handleSolfegeChange = (solfege, index) => {
-    if (selectedSolfegeIndex.includes(index)) {
-      setSelectedSolfegeIndex(
-        selectedSolfegeIndex.filter((item) => item !== index),
+  const handleNoteChange = (index) => {
+    if (selectedNoteIndex.includes(index)) {
+      setSelectedNoteIndex(
+        selectedNoteIndex.filter((item) => item !== index),
       );
     } else {
-      setSelectedSolfegeIndex([...selectedSolfegeIndex, index]);
+      setSelectedNoteIndex([...selectedNoteIndex, index]);
     }
   };
 
-  const toggleAccidentalsType = () => {
-    setAccidentalsType((prevType) => (prevType === "sharp" ? "flat" : "sharp"));
+  const toggleSelectedAccidentalsType = () => {
+    setSelectedAccidentalsType((prevType) => (prevType === noteData.accidentalsType.sharp ? noteData.accidentalsType.flat : noteData.accidentalsType.sharp));
   };
 
   const handleStartTraining = () => {
-    navigate("/start-training", { state: { selectedSolfegeIndex, accidentalsType } });
+    navigate("/start-training", { state: { selectedNoteIndex, selectedAccidentalsType } });
   };
 
-  return (
-      <Layout>
-          <h2>Settings</h2>
-          <div
-              style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "start",
-                  marginBottom: "16px",
-              }}
-          >
-              <h3>Solfège: </h3>
-              <div style={{padding: "8px"}}/>
-              <div
-                  style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: "8px",
-                  }}
-              >
-                  {solfege.map((item, index) => (
+  const initialQuestions = [
+      {
+          question: 'Solfège Name:'
+          , answer:
+              <div>
+                  {noteChoiceIndex.map((item, index) => (
                       <button
                           key={item}
-                          onClick={() => handleSolfegeChange(item, index)}
+                          onClick={() => handleNoteChange(item)}
                           style={{
-                              backgroundColor: selectedSolfegeIndex.includes(index)
+                              backgroundColor: selectedNoteIndex.includes(item)
                                   ? "blue"
                                   : "white",
-                              color: selectedSolfegeIndex.includes(index) ? "white" : "black",
+                              color: selectedNoteIndex.includes(item) ? "white" : "black",
                               width: "70px",
                               padding: "8px",
                               border: "1px solid #ccc",
                               borderRadius: "4px",
                           }}
                       >
-                          {item}
+                          {/*{noteDataUtil.getSharpSolfegeName(item)}*/}
+                          {noteDataUtil.getNoteName(item, "solfege", selectedAccidentalsType)}
                       </button>
                   ))}
               </div>
-          </div>
+      },
+      {
+          question: 'Accidentals Type'
+          , answer:
+              <button onClick={toggleSelectedAccidentalsType} style={{marginTop: "16px"}}>
+                {noteDataUtil.getAccidentalsType(selectedAccidentalsType)}
+              </button>
+      },
+      {
+          question: 'How many questions'
+          , answer: '10'
+      },
+      {
+          question: 'How many notes for each questions'
+          , answer: '5'
+      },
+  ];
 
-          <div
-              style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "start",
-                  marginBottom: "16px",
-              }}
-          >
-              <h3>Accidentals Type: </h3>
-              <div style={{padding: "8px"}}/>
-              <div
-                  style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: "8px",
-                  }}
-              >
-                  <button onClick={toggleAccidentalsType} style={{marginTop: "16px"}}>
-                      {noteDataUtil.getAccidentalsType(accidentalsType)}
-                  </button>
-              </div>
-          </div>
+    return (
+        <Layout>
 
-          <h3>{"debug selectedSolfegeIndex:" + selectedSolfegeIndex}</h3>
-          <h3>{"debug accidentalsType:" + accidentalsType}</h3>
-          <button onClick={handleStartTraining} style={{marginTop: "16px"}}>
-              Start Training
-          </button>
+            <QATable title="Melody Dictation" initialQuestions={initialQuestions}/>
 
-          <QATable />
-      </Layout>
+            {/*<h3>{"debug selectedNoteIndex:" + selectedNoteIndex}</h3>*/}
+            {/*<h3>{"debug selectedAccidentalsType:" + selectedAccidentalsType}</h3>*/}
+            {/*<h3>{"debug noteChoiceIndex to name:" +*/}
+            {/*    noteChoiceIndex.map((item, index) => {*/}
+            {/*        return noteDataUtil.getFlatSolfegeName(item);*/}
+            {/*    })*/}
+            {/*}</h3>*/}
 
-  );
+            <button onClick={handleStartTraining} style={{marginTop: "16px"}}>
+                Start Training
+            </button>
+        </Layout>
+
+    );
 };
 
 export default SettingsPage;

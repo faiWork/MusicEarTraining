@@ -14,19 +14,23 @@ const SettingsPage = () => {
     setSelectedNoteIndex,
     selectedAccidentalsType,
     setSelectedAccidentalsType,
+    numOfQuestions,
+    setNumOfQuestions,
+    numOfAnswers,
+    setNumOfAnswers
   } = useContext(AppContext);
 
   const navigate = useNavigate();
 
-  const noteChoiceIndex = [-12, -11, -10, -9 -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+  const noteChoiceIndex = [-12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
-  const handleNoteChange = (index) => {
+  const handleSelectNote = (index) => {
     if (selectedNoteIndex.includes(index)) {
       setSelectedNoteIndex(
         selectedNoteIndex.filter((item) => item !== index),
       );
     } else {
-      setSelectedNoteIndex([...selectedNoteIndex, index]);
+      setSelectedNoteIndex([...selectedNoteIndex, index].sort((a, b) => a - b));
     }
   };
 
@@ -35,8 +39,10 @@ const SettingsPage = () => {
   };
 
   const handleStartTraining = () => {
-    navigate("/start-training", { state: { selectedNoteIndex, selectedAccidentalsType } });
+    navigate("/start-training", { state: { selectedNoteIndex, selectedAccidentalsType, numOfQuestions, numOfAnswers} });
   };
+
+  const headers = ["Setting", "Choice"];
 
   const initialQuestions = [
       {
@@ -46,7 +52,7 @@ const SettingsPage = () => {
                   {noteChoiceIndex.map((item, index) => (
                       <button
                           key={item}
-                          onClick={() => handleNoteChange(item)}
+                          onClick={() => handleSelectNote(item)}
                           style={{
                               backgroundColor: selectedNoteIndex.includes(item)
                                   ? "blue"
@@ -58,7 +64,6 @@ const SettingsPage = () => {
                               borderRadius: "4px",
                           }}
                       >
-                          {/*{noteDataUtil.getSharpSolfegeName(item)}*/}
                           {noteDataUtil.getNoteName(item, "solfege", selectedAccidentalsType)}
                       </button>
                   ))}
@@ -73,33 +78,35 @@ const SettingsPage = () => {
       },
       {
           question: 'How many questions'
-          , answer: '10'
+          , answer: numOfQuestions
       },
       {
           question: 'How many notes for each questions'
-          , answer: '5'
+          , answer: numOfAnswers
       },
   ];
 
-    return (
-        <Layout>
+  
 
-            <QATable title="Melody Dictation" initialQuestions={initialQuestions}/>
+  return (
+      <Layout>
 
-            {/*<h3>{"debug selectedNoteIndex:" + selectedNoteIndex}</h3>*/}
-            {/*<h3>{"debug selectedAccidentalsType:" + selectedAccidentalsType}</h3>*/}
-            {/*<h3>{"debug noteChoiceIndex to name:" +*/}
-            {/*    noteChoiceIndex.map((item, index) => {*/}
-            {/*        return noteDataUtil.getFlatSolfegeName(item);*/}
-            {/*    })*/}
-            {/*}</h3>*/}
+          <QATable title="Melody Dictation Setting" initialQuestions={initialQuestions} headers={headers}/>
 
-            <button onClick={handleStartTraining} style={{marginTop: "16px"}}>
-                Start Training
-            </button>
-        </Layout>
+          {/*<h3>{"debug selectedNoteIndex:" + selectedNoteIndex}</h3>*/}
+          {/*<h3>{"debug selectedAccidentalsType:" + selectedAccidentalsType}</h3>*/}
+          {/*<h3>{"debug noteChoiceIndex to name:" +*/}
+          {/*    noteChoiceIndex.map((item, index) => {*/}
+          {/*        return noteDataUtil.getFlatSolfegeName(item);*/}
+          {/*    })*/}
+          {/*}</h3>*/}
 
-    );
+          <button onClick={handleStartTraining} style={{marginTop: "16px"}}>
+              Start Training
+          </button>
+      </Layout>
+
+  );
 };
 
 export default SettingsPage;

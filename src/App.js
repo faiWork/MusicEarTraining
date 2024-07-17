@@ -11,14 +11,20 @@ export const AppContext = createContext();
 const App = () => {
   const [selectedNoteIndex, setSelectedNoteIndex] = useState([]);
   const [selectedAccidentalsType, setSelectedAccidentalsType] = useState(noteData.accidentalsType.sharp);
+  const [numOfQuestions, setNumOfQuestions] = useState([10]);
+  const [numOfAnswers, setNumOfAnswers] = useState([5]);
 
   return (
     <AppContext.Provider
       value={{
         selectedNoteIndex,
         setSelectedNoteIndex,
-        selectedAccidentalsType: selectedAccidentalsType,
-        setSelectedAccidentalsType: setSelectedAccidentalsType,
+        selectedAccidentalsType,
+        setSelectedAccidentalsType,
+        numOfQuestions,
+        setNumOfQuestions,
+        numOfAnswers,
+        setNumOfAnswers
       }}
     >
       <Router>

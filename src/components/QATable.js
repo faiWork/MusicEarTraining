@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {AppContext} from "../App";
 
-const QATable = ({ title, initialQuestions = [] }) => {
+const QATable = ({ title, initialQuestions = [], headers = [] }) => {
 
     const [questions, setQuestions] = useState(initialQuestions);
     const [newQuestion, setNewQuestion] = useState('');
@@ -31,18 +31,18 @@ const QATable = ({ title, initialQuestions = [] }) => {
             <table>
                 <thead>
                 <tr>
-                    <th>Setting</th>
-                    <th>Choice</th>
-                    {/*<th>Actions</th>*/}
+                    {headers.map((item, index) => (
+                        <th>{item}</th>
+                    ))}
                 </tr>
                 </thead>
                 <tbody>
-                {questions.map((qa, index) => (
-                    <tr key={index}>
-                        <td style={{ verticalAlign: 'top' }}>{qa.question}</td>
-                        <td style={{ verticalAlign: 'top' }}>{qa.answer}</td>
-                    </tr>
-                ))}
+                    {questions.map((qa, index) => (
+                        <tr key={index}>
+                            <td style={{ verticalAlign: 'top' }}>{qa.question}</td>
+                            <td style={{ verticalAlign: 'top' }}>{qa.answer}</td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>

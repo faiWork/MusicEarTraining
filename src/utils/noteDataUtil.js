@@ -47,3 +47,24 @@ export function getNoteName(degree, selectedNoteType, selectedAccidentalsType) {
 
     return noteName;
 }
+
+const noteNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+
+export function getMidiNote (noteIndex, accidentalsType) {
+  const octave = Math.floor(noteIndex / noteNames.length);
+  const noteNameIndex = noteIndex % noteNames.length;
+  let noteName = noteNames[noteNameIndex];
+
+  // Adjust the note name based on the accidentalsType
+  if (accidentalsType === "sharps") {
+    // No changes needed for sharps
+  } else if (accidentalsType === "flats") {
+    if (noteName.includes("#")) {
+      noteName = noteNames[noteNameIndex - 1] + "b";
+    }
+  }
+
+  // Calculate the MIDI note value
+  const midiNote = octave * 12 + noteNames.indexOf(noteName);
+  return midiNote;
+};

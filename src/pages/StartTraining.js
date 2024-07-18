@@ -8,27 +8,25 @@ import * as noteData from "../utils/noteData";
 import * as noteDataUtil from "../utils/noteDataUtil";
 import '../styles/MyComponent.css';
 import {audioFiles, middleC_Index} from '../utils/audioFiles';
-// import piano_4_c from "../sound/piano-88-notes/4-c.wav";
+import VolumeDown from '@mui/icons-material/VolumeDown';
+import VolumeUp from '@mui/icons-material/VolumeUp';
 
 const StartTraining = () => {
-
     const {state} = useLocation();
     const navigate = useNavigate();
     const [selectedButton, setSelectedButton] = useState([]);
     const [trainingQuestions, setTrainingQuestions] = useState([]);
     const [trainingAnswers, seTrainingAnswers] = useState([]);
-
     const [isPlaying, setIsPlaying] = useState(false);
+    const [volume, setVolume] = useState(1); // Initialize volume to 1 (100%)
+
+    let currentAudio = null;
 
     useEffect(() => {
         generateTrainingQuestions();
     }, [state.selectedNoteIndex]);
 
-    // const questions
-    let currentQuestionIndex = 1;
-
     const generateTrainingQuestions = () => {
-
         const selectedNoteIndex = state.selectedNoteIndex;
         const randomQuestions = [];
 
@@ -45,7 +43,6 @@ const StartTraining = () => {
         navigate("/settings");
     };
 
-
     const eraseAnswerFunction = () => {
         // Make a copy of the trainingAnswers array
         const updatedTrainingAnswers = [...trainingAnswers];
@@ -60,11 +57,17 @@ const StartTraining = () => {
     const finalAnswerFunction = () => {
     };
 
-    const playRootNoteFunction = () => {
-        let audioFilesToPlay = [audioFiles[middleC_Index]];
+    const pauseNoteFunction = () => {
+        console.log("pauseNoteFunction currentAudio:" + currentAudio)
+        currentAudio.pause();
+    }
+
+    const playNoteFunction = (noteIndex) => {
+        console.log("playNoteFunction start");
+        let audioFilesToPlay = [audioFiles[middleC_Index + noteIndex]];
 
         let currentIndex = 0;
-        let currentAudio = null;
+        // let currentAudio = null;
         let intervalId;
 
         const playNextAudio = () => {
@@ -73,7 +76,10 @@ const StartTraining = () => {
                     currentAudio.pause();
                 }
                 currentAudio = new Audio(audioFilesToPlay[currentIndex]);
+                currentAudio.volume = volume; // Set the volume for the current audio
+                console.log("currentAudio before play:" + currentAudio);
                 currentAudio.play();
+                console.log("currentAudio after play:" + currentAudio);
                 currentIndex++;
             } else {
                 clearInterval(intervalId);
@@ -81,9 +87,12 @@ const StartTraining = () => {
             }
         };
 
+        console.log("isPlaying:" + isPlaying);
+        console.log("currentAudio:" + currentAudio);
         if (isPlaying) {
             clearInterval(intervalId);
             if (currentAudio) {
+                console.log("pause");
                 currentAudio.pause();
             }
             setIsPlaying(false);
@@ -104,7 +113,7 @@ const StartTraining = () => {
         }
 
         let currentIndex = 0;
-        let currentAudio = null;
+        // let currentAudio = null;
         let intervalId;
 
         const playNextAudio = () => {
@@ -113,6 +122,7 @@ const StartTraining = () => {
                     currentAudio.pause();
                 }
                 currentAudio = new Audio(audioFilesToPlay[currentIndex]);
+                currentAudio.volume = volume; // Set the volume for the current audio
                 currentAudio.play();
                 currentIndex++;
             } else {
@@ -126,9 +136,9 @@ const StartTraining = () => {
                 currentAudio.pause();
             }
             currentAudio = new Audio(audioFilesToPlay[currentIndex]);
+            currentAudio.volume = volume; // Set the volume for the current audio
             currentAudio.play();
             currentIndex++;
-
         };
 
         if (isPlaying) {
@@ -151,21 +161,35 @@ const StartTraining = () => {
                 const noteDelay = (60 / bpm) * 1000; // Duration of each note in milliseconds
                 intervalId = setInterval(playNextAudio, noteDelay);
             }
-
         }
-
     };
 
     const handleAnswer = (answer) => {
-        seTrainingAnswers([...trainingAnswers, answer]);
+        if (trainingAnswers.length < trainingQuestions.length) {
+            seTrainingAnswers([...trainingAnswers, answer]);
+        }
+    };
+
+    const handleVolumeChange = (event) => {
+        setVolume(event.target.value);
     };
 
     const initialQuestions = [
         {
             question: 'Question:',
-            answer: trainingQuestions.map((item, index) =>
-                noteDataUtil.getNoteName(item, "solfege", state.selectedAccidentalsType)
-            ).join(", ")
+            answer: (
+                <div>
+                    {trainingQuestions.map((item, index) => (
+                        <button
+                            key={"A" + index}
+                            className={`note-button ${selectedButton === ("A" + index) ? 'selected' : ''}`}
+                            onClick={() => playNoteFunction(item)}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                </div>
+            ),
         },
         {
             question: 'Action:',
@@ -179,9 +203,25 @@ const StartTraining = () => {
                         {isPlaying ? 'Pause' : 'Play Root and Question'}
                     </button>
 
-                    <button id="playRootNoteButton" onClick={playRootNoteFunction}>
+                    <button id="playNoteButton" onClick={() => playNoteFunction(0)}>
                         {isPlaying ? 'Pause' : 'Play Root'}
                     </button>
+
+                    <button id="pauseNoteButton" onClick={pauseNoteFunction}>
+                        {'Pause'}
+                    </button>
+
+
+                    <VolumeDown/>
+                    <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        value={volume}
+                        onChange={handleVolumeChange}
+                    />
+                    <VolumeUp/>
                 </div>
         },
         {
@@ -195,7 +235,7 @@ const StartTraining = () => {
             answer:
                 <div>
                     <button id="eraseButton" onClick={eraseAnswerFunction}>Erase</button>
-                    <button id="finalAnswerButton" onClick={finalAnswerFunction}>Final Answer</button>
+                    <button id="finalAnswerButton" disabled={trainingAnswers.length !== trainingQuestions.length} onClick={finalAnswerFunction}>Final Answer</button>
                 </div>
         },
         {

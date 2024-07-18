@@ -84,6 +84,17 @@ const StartTraining = () => {
             }
         };
 
+        const playRootAudio = () => {
+            if (currentAudio) {
+                currentAudio.pause();
+            }
+            currentAudio = new Audio(audioFilesToPlay[currentIndex]);
+            currentAudio.play();
+            currentIndex++;
+
+            clearInterval(intervalId);
+        };
+
         if (isPlaying) {
             clearInterval(intervalId);
             if (currentAudio) {
@@ -92,9 +103,19 @@ const StartTraining = () => {
             setIsPlaying(false);
         } else {
             setIsPlaying(true);
-            const bpm = 80;
-            const noteDelay = (60 / bpm) * 1000; // Duration of each note in milliseconds
-            intervalId = setInterval(playNextAudio, noteDelay);
+            if(playRoot) {
+                playRootAudio();
+                setTimeout(function () {
+                    const bpm = 80;
+                    const noteDelay = (60 / bpm) * 1000; // Duration of each note in milliseconds
+                    intervalId = setInterval(playNextAudio, noteDelay);
+                }, 1000);
+            }else{
+                const bpm = 80;
+                const noteDelay = (60 / bpm) * 1000; // Duration of each note in milliseconds
+                intervalId = setInterval(playNextAudio, noteDelay);
+            }
+
         }
 
     };

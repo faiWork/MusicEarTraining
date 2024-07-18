@@ -7,8 +7,8 @@ import QATable from '../components/QATable';
 import * as noteData from "../utils/noteData";
 import * as noteDataUtil from "../utils/noteDataUtil";
 import '../styles/MyComponent.css';
-import { MidiPlayer } from "react-midi-player";
-import audioFile from '../sound/GrandPiano/piano-f-c4.wav'
+import {audioFiles, middleC_Index} from '../utils/audioFiles';
+// import piano_4_c from "../sound/piano-88-notes/4-c.wav";
 
 const StartTraining = () => {
 
@@ -60,26 +60,43 @@ const StartTraining = () => {
     const finalAnswerFunction = () => {
     };
 
-    const playAllQuestionFunction = () => {
-        // const audioFile = "../sound/GrandPiano/piano-f-c4.wav";
-        const audio = new Audio(audioFile);
-
-        if (audio) {
-            if (isPlaying) {
-                audio.pause();
-            } else {
-                audio.play();
-            }
-            setIsPlaying(!isPlaying);
+    const playAllQuestionFunction = (playRoot) => {
+        let audioFilesToPlay = [...trainingQuestions.map(noteIndex => audioFiles[middleC_Index + noteIndex])];
+        if(playRoot){
+            audioFilesToPlay = [audioFiles[middleC_Index],...audioFilesToPlay]
         }
 
-        // audio.play()
-        //     .then(() => {
-        //         console.log("Audio playback started successfully");
-        //     })
-        //     .catch((error) => {
-        //         console.error("Error playing audio:", error);
-        //     });
+        let currentIndex = 0;
+        let currentAudio = null;
+        let intervalId;
+
+        const playNextAudio = () => {
+            if (currentIndex < audioFilesToPlay.length) {
+                if (currentAudio) {
+                    currentAudio.pause();
+                }
+                currentAudio = new Audio(audioFilesToPlay[currentIndex]);
+                currentAudio.play();
+                currentIndex++;
+            } else {
+                clearInterval(intervalId);
+                setIsPlaying(false);
+            }
+        };
+
+        if (isPlaying) {
+            clearInterval(intervalId);
+            if (currentAudio) {
+                currentAudio.pause();
+            }
+            setIsPlaying(false);
+        } else {
+            setIsPlaying(true);
+            const bpm = 80;
+            const noteDelay = (60 / bpm) * 1000; // Duration of each note in milliseconds
+            intervalId = setInterval(playNextAudio, noteDelay);
+        }
+
     };
 
     const handleAnswer = (answer) => {
@@ -96,11 +113,15 @@ const StartTraining = () => {
         {
             question: 'Action:',
             answer:
-            // <button id="playAllQuestionButton" onClick={playAllQuestionFunction(trainingQuestions)}>Play Again</button>
+                <div>
+                    <button id="playAllQuestionButton" onClick={() => playAllQuestionFunction(false)}>
+                        {isPlaying ? 'Pause' : 'Play Question'}
+                    </button>
 
-                <button onClick={playAllQuestionFunction}>
-                    {isPlaying ? 'Pause' : 'Play'}
-                </button>
+                    <button id="playRootAndAllQuestionButton" onClick={() => playAllQuestionFunction(true)}>
+                        {isPlaying ? 'Pause' : 'Play Root and Question'}
+                    </button>
+                </div>
         },
         {
             question: 'Answer:',
@@ -133,25 +154,6 @@ const StartTraining = () => {
                     ))}
                 </div>
             ),
-            // , answer:
-            //   <div>
-            //     {state.selectedNoteIndex.map((item, index) => (
-            //         <button
-            //             key={item}
-            //             onClick={() => handleAnswer(item)}
-            //             style={{
-            //                 backgroundColor: "white",
-            //                 color: "black",
-            //                 width: "70px",
-            //                 padding: "8px",
-            //                 border: "1px solid #ccc",
-            //                 borderRadius: "4px",
-            //             }}
-            //         >
-            //             {noteDataUtil.getNoteName(item, "solfege", state.selectedAccidentalsType)}
-            //         </button>
-            //     ))}
-            //   </div>
         },
     ];
 
@@ -159,7 +161,7 @@ const StartTraining = () => {
         <Layout>
             <QATable title="Melody Dictation Training" initialQuestions={initialQuestions}/>
 
-
+            {<h3>{"debug trainingQuestions:" + trainingQuestions.join(", ")}</h3>}
             {<h3>{"debug selectedNoteIndex:" + state.selectedNoteIndex.join(", ")}</h3>}
             {<h3>{"debug selectedAccidentalsType:" + state.selectedAccidentalsType}</h3>}
 

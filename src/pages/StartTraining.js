@@ -60,6 +60,43 @@ const StartTraining = () => {
     const finalAnswerFunction = () => {
     };
 
+    const playRootNoteFunction = () => {
+        let audioFilesToPlay = [audioFiles[middleC_Index]];
+
+        let currentIndex = 0;
+        let currentAudio = null;
+        let intervalId;
+
+        const playNextAudio = () => {
+            if (currentIndex < audioFilesToPlay.length) {
+                if (currentAudio) {
+                    currentAudio.pause();
+                }
+                currentAudio = new Audio(audioFilesToPlay[currentIndex]);
+                currentAudio.play();
+                currentIndex++;
+            } else {
+                clearInterval(intervalId);
+                setIsPlaying(false);
+            }
+        };
+
+        if (isPlaying) {
+            clearInterval(intervalId);
+            if (currentAudio) {
+                currentAudio.pause();
+            }
+            setIsPlaying(false);
+        } else {
+            setIsPlaying(true);
+
+            const bpm = 80;
+            const noteDelay = (60 / bpm) * 1000; // Duration of each note in milliseconds
+            intervalId = setInterval(playNextAudio, noteDelay);
+
+        }
+    }
+
     const playAllQuestionFunction = (playRoot) => {
         let audioFilesToPlay = [...trainingQuestions.map(noteIndex => audioFiles[middleC_Index + noteIndex])];
         if(playRoot){
@@ -92,7 +129,6 @@ const StartTraining = () => {
             currentAudio.play();
             currentIndex++;
 
-            clearInterval(intervalId);
         };
 
         if (isPlaying) {
@@ -141,6 +177,10 @@ const StartTraining = () => {
 
                     <button id="playRootAndAllQuestionButton" onClick={() => playAllQuestionFunction(true)}>
                         {isPlaying ? 'Pause' : 'Play Root and Question'}
+                    </button>
+
+                    <button id="playRootNoteButton" onClick={playRootNoteFunction}>
+                        {isPlaying ? 'Pause' : 'Play Root'}
                     </button>
                 </div>
         },

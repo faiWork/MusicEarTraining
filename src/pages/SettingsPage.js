@@ -46,26 +46,29 @@ const SettingsPage = () => {
 
   const initialQuestions = [
       {
-          question: 'Solfège Name:'
+          question: 'Note Choice:'
           , answer:
               <div>
                   {noteChoiceIndex.map((item, index) => (
-                      <button
-                          key={item}
-                          onClick={() => handleSelectNote(item)}
-                          style={{
-                              backgroundColor: selectedNoteIndex.includes(item)
-                                  ? "blue"
-                                  : "white",
-                              color: selectedNoteIndex.includes(item) ? "white" : "black",
-                              width: "70px",
-                              padding: "8px",
-                              border: "1px solid #ccc",
-                              borderRadius: "4px",
-                          }}
-                      >
-                          {noteDataUtil.getNoteName(item, "solfege", selectedAccidentalsType)}
-                      </button>
+                      <React.Fragment key={item}>
+                          <button
+                              id={`noteChoiceButton${item}`}
+                              onClick={() => handleSelectNote(item)}
+                              style={{
+                                  backgroundColor: selectedNoteIndex.includes(item) ? 'blue' : 'white',
+                                  color: selectedNoteIndex.includes(item) ? 'white' : 'black',
+                                  width: '70px',
+                                  padding: '8px',
+                                  border: '1px solid #ccc',
+                                  borderRadius: '4px',
+                                  marginRight: index % 12 !== 11 ? '8px' : '0',
+                                  marginBottom: index % 12 === 11 ? '8px' : '0',
+                              }}
+                          >
+                              {noteDataUtil.getNoteName(item, 'solfege', selectedAccidentalsType)}
+                          </button>
+                          {index % 12 === 11 && <br/>}
+                      </React.Fragment>
                   ))}
               </div>
       },
@@ -73,7 +76,7 @@ const SettingsPage = () => {
           question: 'Accidentals Type'
           , answer:
               <button onClick={toggleSelectedAccidentalsType} style={{marginTop: "16px"}}>
-                {noteDataUtil.getAccidentalsType(selectedAccidentalsType)}
+                  {noteDataUtil.getAccidentalsType(selectedAccidentalsType)}
               </button>
       },
       {
@@ -86,17 +89,16 @@ const SettingsPage = () => {
       },
   ];
 
-  
 
-  return (
-      <Layout>
+    return (
+        <Layout>
 
-          <QATable title="Melody Dictation Setting" initialQuestions={initialQuestions} headers={headers}/>
+            <QATable title="Melody Dictation Setting" initialQuestions={initialQuestions} headers={headers}/>
 
-          {/*<h3>{"debug selectedNoteIndex:" + selectedNoteIndex}</h3>*/}
-          {/*<h3>{"debug selectedAccidentalsType:" + selectedAccidentalsType}</h3>*/}
-          {/*<h3>{"debug noteChoiceIndex to name:" +*/}
-          {/*    noteChoiceIndex.map((item, index) => {*/}
+            {/*<h3>{"debug selectedNoteIndex:" + selectedNoteIndex}</h3>*/}
+            {/*<h3>{"debug selectedAccidentalsType:" + selectedAccidentalsType}</h3>*/}
+            {/*<h3>{"debug noteChoiceIndex to name:" +*/}
+            {/*    noteChoiceIndex.map((item, index) => {*/}
           {/*        return noteDataUtil.getFlatSolfegeName(item);*/}
           {/*    })*/}
           {/*}</h3>*/}

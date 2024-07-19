@@ -208,6 +208,7 @@ const StartTraining = () => {
                 <div>
                     {trainingQuestions.map((item, index) => (
                         <button
+                            id={"trainingQuestionButton" + index}
                             key={"A" + index}
                             className={`note-button ${selectedButton === ("A" + index) ? 'selected' : ''}`}
                             onClick={() => playNoteFunction(item)}

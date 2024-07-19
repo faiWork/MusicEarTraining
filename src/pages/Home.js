@@ -9,6 +9,10 @@ const Home = () => {
     navigate("/settings");
   };
 
+  const handleWebAudioAPITestClick = () => {
+    navigate("/web-audio-api-test");
+  };
+
   return (
     <Layout>
       <div className="App">
@@ -34,6 +38,9 @@ const Home = () => {
               </li>
               <li>Customizable difficulty levels</li>
               <li>Progress tracking and statistics</li>
+              {/*<button onClick={handleWebAudioAPITestClick}>*/}
+              {/*  Web Audio API Test*/}
+              {/*</button>*/}
             </ul>
           </section>
           <section className="App-content">

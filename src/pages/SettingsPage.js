@@ -79,6 +79,22 @@ const SettingsPage = () => {
                 </div>
         },
         {
+          question: 'Select notes by scale/mode'
+          , answer: 'Buttons/OptionList'
+        },
+        {
+          question: 'Play the note when answering the note'
+          , answer: 'Yes/No'
+        },
+        {
+          question: 'Random Key or Fix Key(up to 5 keys)' // two buttons
+          , answer: '5 dropdown if Fix Key is selected'
+        },
+        {
+          question: 'Single Note Mode/Chord Note Mode'
+          , answer: 'Single/Chord'
+        },
+        {
             question: 'Accidentals Type'
             , answer:
                 <button onClick={toggleSelectedAccidentalsType} style={{marginTop: "16px"}}>
@@ -116,6 +132,18 @@ const SettingsPage = () => {
                     ))}
                 </select>
             )
+        },
+        {
+          question: 'Largest Interval'
+          , answer: ''
+        },
+        {
+          question: 'Start with Root Note'
+          , answer: ''
+        },
+        {
+          question: 'Tempo'
+          , answer: '80bpm'
         },
     ];
 

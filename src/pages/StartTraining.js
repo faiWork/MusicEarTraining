@@ -12,22 +12,23 @@ import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';
 
 const StartTraining = () => {
-    const {state} = useLocation();
+    const { selectedNoteIndex, selectedAccidentalsType, numOfQuestions, numOfAnswers } = state;
     const navigate = useNavigate();
     const [selectedButton, setSelectedButton] = useState([]);
     const [trainingQuestions, setTrainingQuestions] = useState([]);
     const [trainingAnswers, seTrainingAnswers] = useState([]);
     const [isPlaying, setIsPlaying] = useState(false);
     const [volume, setVolume] = useState(1); // Initialize volume to 1 (100%)
+    const [showNextQuestionButton, setShowNextQuestionButton] = useState(false);
 
     let currentAudio = null;
 
     useEffect(() => {
         generateTrainingQuestions();
-    }, [state.selectedNoteIndex]);
+    }, [selectedNoteIndex]);
 
     const generateTrainingQuestions = () => {
-        const selectedNoteIndex = state.selectedNoteIndex;
+        const selectedNoteIndex = selectedNoteIndex;
         const randomQuestions = [];
 
         for (let i = 0; i < state.numOfAnswers; i++) {
@@ -55,6 +56,37 @@ const StartTraining = () => {
     };
 
     const finalAnswerFunction = () => {
+        // Check if the trainingQuestions array is equal to the trainingAnswers array
+        if (JSON.stringify(trainingQuestions) === JSON.stringify(trainingAnswers)) {
+            // Display the "Correct" message
+            console.log("Correct");
+
+            // Enable the "Next Question" button
+            setShowNextQuestionButton(true);
+
+            // Increment the numOfQuestions
+            setNumOfQuestions(numOfQuestions + 1);
+
+            // Generate a new question
+            generateTrainingQuestions();
+
+            // Reset the trainingAnswers array
+            seTrainingAnswers([]);
+        } else {
+            // Display an error message or handle the incorrect answer
+            console.log("Incorrect");
+        }
+    };
+
+    const handleNextQuestion = () => {
+        // Generate a new question
+        generateTrainingQuestions();
+
+        // Reset the trainingAnswers array
+        seTrainingAnswers([]);
+
+        // Hide the "Next Question" button
+        setShowNextQuestionButton(false);
     };
 
     const pauseNoteFunction = () => {
@@ -227,7 +259,7 @@ const StartTraining = () => {
         {
             question: 'Answer:',
             answer: trainingAnswers.map((item, index) =>
-                noteDataUtil.getNoteName(item, "solfege", state.selectedAccidentalsType)
+                noteDataUtil.getNoteName(item, "solfege", selectedAccidentalsType)
             ).join(", ")
         },
         {
@@ -236,13 +268,14 @@ const StartTraining = () => {
                 <div>
                     <button id="eraseButton" onClick={eraseAnswerFunction}>Erase</button>
                     <button id="finalAnswerButton" disabled={trainingAnswers.length !== trainingQuestions.length} onClick={finalAnswerFunction}>Final Answer</button>
+                    {showNextQuestionButton && (<button onClick={handleNextQuestion}>Next Question</button>)}
                 </div>
         },
         {
             question: '',
             answer: (
                 <div>
-                    {state.selectedNoteIndex.map((item, index) => (
+                    {selectedNoteIndex.map((item, index) => (
                         <button
                             key={item}
                             className={`note-button ${selectedButton === item ? 'selected' : ''}`}
@@ -250,7 +283,7 @@ const StartTraining = () => {
                             onMouseUp={() => setSelectedButton(null)}
                             onClick={() => handleAnswer(item)}
                         >
-                            {noteDataUtil.getNoteName(item, "solfege", state.selectedAccidentalsType)}
+                            {noteDataUtil.getNoteName(item, "solfege", selectedAccidentalsType)}
                         </button>
                     ))}
                 </div>
@@ -263,8 +296,8 @@ const StartTraining = () => {
             <QATable title="Melody Dictation Training" initialQuestions={initialQuestions}/>
 
             {<h3>{"debug trainingQuestions:" + trainingQuestions.join(", ")}</h3>}
-            {<h3>{"debug selectedNoteIndex:" + state.selectedNoteIndex.join(", ")}</h3>}
-            {<h3>{"debug selectedAccidentalsType:" + state.selectedAccidentalsType}</h3>}
+            {<h3>{"debug selectedNoteIndex:" + selectedNoteIndex.join(", ")}</h3>}
+            {<h3>{"debug selectedAccidentalsType:" + selectedAccidentalsType}</h3>}
 
             <button onClick={handleBack}>Back</button>
 

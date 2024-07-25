@@ -29,6 +29,9 @@ const StartTraining = () => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [volume, setVolume] = useState(1); // Initialize volume to 1 (100%)
     const [showNextQuestionButton, setShowNextQuestionButton] = useState(false);
+    const [finalAnswerResponseMessage, setFinalAnswerResponseMessage] = useState('');
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(1);
+    
 
     let currentAudio = null;
 
@@ -63,26 +66,27 @@ const StartTraining = () => {
         seTrainingAnswers(updatedTrainingAnswers);
     };
 
-    const finalAnswerFunction = () => {
+    const eraseAllAnswerFunction = () => {
+        // Update the trainingAnswers state with the modified array
+        seTrainingAnswers([]);
+    };
+
+    
+
+    const checkFinalAnswerFunction = () => {
         // Check if the trainingQuestions array is equal to the trainingAnswers array
         if (JSON.stringify(trainingQuestions) === JSON.stringify(trainingAnswers)) {
             // Display the "Correct" message
-            console.log("Correct");
+            setFinalAnswerResponseMessage("Correct");
 
             // Enable the "Next Question" button
             setShowNextQuestionButton(true);
 
-            // Increment the numOfQuestions
-            setNumOfQuestions(numOfQuestions + 1);
+            
 
-            // Generate a new question
-            generateTrainingQuestions();
-
-            // Reset the trainingAnswers array
-            seTrainingAnswers([]);
         } else {
             // Display an error message or handle the incorrect answer
-            console.log("Incorrect");
+            setFinalAnswerResponseMessage("Incorrect");
         }
     };
 
@@ -95,6 +99,12 @@ const StartTraining = () => {
 
         // Hide the "Next Question" button
         setShowNextQuestionButton(false);
+
+        //Reset FinalAnswerResponseMessage
+        setFinalAnswerResponseMessage("");
+
+        // // Increment the currentQuestionIndex
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
     };
 
     const pauseNoteFunction = () => {
@@ -216,7 +226,7 @@ const StartTraining = () => {
 
     const initialQuestions = [
         {
-            question: 'Question:',
+            question: 'Question(' + currentQuestionIndex + '/' + numOfQuestions + '):',
             answer: (
                 <div>
                     {trainingQuestions.map((item, index) => (
@@ -272,10 +282,18 @@ const StartTraining = () => {
         },
         {
             question: '',
+            answer: 
+                <div>
+                    {<h3>{finalAnswerResponseMessage}</h3>}
+                </div>
+        },
+        {
+            question: '',
             answer:
                 <div>
                     <button id="eraseButton" onClick={eraseAnswerFunction}>Erase</button>
-                    <button id="finalAnswerButton" disabled={trainingAnswers.length !== trainingQuestions.length} onClick={finalAnswerFunction}>Final Answer</button>
+                    <button id="eraseAllButton" onClick={eraseAllAnswerFunction}>Erase All</button>
+                    <button id="finalAnswerButton" disabled={trainingAnswers.length !== trainingQuestions.length} onClick={checkFinalAnswerFunction}>Final Answer</button>
                     {showNextQuestionButton && (<button onClick={handleNextQuestion}>Next Question</button>)}
                 </div>
         },

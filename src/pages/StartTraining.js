@@ -12,7 +12,16 @@ import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';
 
 const StartTraining = () => {
-    const { selectedNoteIndex, selectedAccidentalsType, numOfQuestions, numOfAnswers } = state;
+    const {
+        selectedNoteIndex,
+        setSelectedNoteIndex,
+        selectedAccidentalsType,
+        setSelectedAccidentalsType,
+        numOfQuestions,
+        setNumOfQuestions,
+        numOfAnswers,
+        setNumOfAnswers
+    } = useContext(AppContext);
     const navigate = useNavigate();
     const [selectedButton, setSelectedButton] = useState([]);
     const [trainingQuestions, setTrainingQuestions] = useState([]);
@@ -28,14 +37,13 @@ const StartTraining = () => {
     }, [selectedNoteIndex]);
 
     const generateTrainingQuestions = () => {
-        const selectedNoteIndex = selectedNoteIndex;
         const randomQuestions = [];
 
-        for (let i = 0; i < state.numOfAnswers; i++) {
+        for (let i = 0; i < numOfAnswers; i++) {
             const randomIndex = Math.floor(Math.random() * selectedNoteIndex.length);
             randomQuestions.push(selectedNoteIndex[randomIndex]);
         }
-        console.log("generateTrainingQuestions state.numOfAnswers:" + state.numOfAnswers);
+        console.log("generateTrainingQuestions numOfAnswers:" + numOfAnswers);
         console.log("generateTrainingQuestions randomQuestions:" + randomQuestions);
         setTrainingQuestions(randomQuestions);
     };

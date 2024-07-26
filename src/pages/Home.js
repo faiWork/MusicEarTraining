@@ -31,16 +31,8 @@ const Home = () => {
           <section className="App-content">
             <h2>Key Features</h2>
             <ul>
-              <li>
-                <button onClick={handleMelodyDictationClick}>
-                  Melody Dictation
-                </button>
-              </li>
               <li>Customizable difficulty levels</li>
               <li>Progress tracking and statistics</li>
-              {/*<button onClick={handleWebAudioAPITestClick}>*/}
-              {/*  Web Audio API Test*/}
-              {/*</button>*/}
             </ul>
           </section>
           <section className="App-content">
@@ -49,6 +41,11 @@ const Home = () => {
               To begin your music ear training journey, navigate to the settings
               page and customize your preferences. Then, start practicing and
               enjoy the process of improving your musical abilities.
+            </p>
+            <p> 
+              <button onClick={handleMelodyDictationClick}>
+                Melody Dictation
+              </button>
             </p>
           </section>
         </main>

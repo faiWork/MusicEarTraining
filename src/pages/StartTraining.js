@@ -242,7 +242,7 @@ const StartTraining = () => {
             ),
         },
         {
-            question: 'Action:',
+            question: 'Sound:',
             answer:
                 <div>
                     <button id="playAllQuestionButton" onClick={() => playAllQuestionFunction(false)}>

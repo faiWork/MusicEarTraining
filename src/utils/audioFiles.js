@@ -187,7 +187,7 @@ function importAll(r) {
 }
 
 const audioFiles = importAll(
-  require.context("../sound/piano-88-notes/", false, /\.(wav|mp3|flac|aac)$/)
+  require.context(`${process.env.PUBLIC_URL}/sound/piano-88-notes/`, false, /\.(wav|mp3|flac|aac)$/)
 );
 
 export { middleC_Index, audioFiles };

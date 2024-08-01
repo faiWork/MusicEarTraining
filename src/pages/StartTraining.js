@@ -114,56 +114,24 @@ const StartTraining = () => {
 
     const playNoteFunction = (noteIndex) => {
         console.log("playNoteFunction start");
-        let audioFilesToPlay = [audioFiles[middleC_Index + noteIndex]];
+        const audioFileToPlay = audioFiles[middleC_Index + noteIndex]; // Updated access to audio file
 
-        let currentIndex = 0;
-        // let currentAudio = null;
-        let intervalId;
-
-        const playNextAudio = () => {
-            if (currentIndex < audioFilesToPlay.length) {
-                if (currentAudio) {
-                    currentAudio.pause();
-                }
-                currentAudio = new Audio(audioFilesToPlay[currentIndex]);
-                currentAudio.volume = volume; // Set the volume for the current audio
-                console.log("currentAudio before play:" + currentAudio);
-                currentAudio.play();
-                console.log("currentAudio after play:" + currentAudio);
-                currentIndex++;
-            } else {
-                clearInterval(intervalId);
-                setIsPlaying(false);
-            }
-        };
-
-        console.log("isPlaying:" + isPlaying);
-        console.log("currentAudio:" + currentAudio);
-        if (isPlaying) {
-            clearInterval(intervalId);
-            if (currentAudio) {
-                console.log("pause");
-                currentAudio.pause();
-            }
-            setIsPlaying(false);
-        } else {
-            setIsPlaying(true);
-
-            const bpm = 80;
-            const noteDelay = (60 / bpm) * 1000; // Duration of each note in milliseconds
-            intervalId = setInterval(playNextAudio, noteDelay);
-
-        }
-    }
+        console.log("audioFileToPlay.path:" + JSON.stringify(audioFileToPlay));
+        let currentAudio = new Audio(audioFileToPlay);
+        currentAudio.volume = volume; // Set the volume for the current audio
+        console.log("currentAudio before play:" + currentAudio);
+        currentAudio.play();
+        console.log("currentAudio after play:" + currentAudio);
+    };
 
     const playAllQuestionFunction = (playRoot) => {
         let audioFilesToPlay = [...trainingQuestions.map(noteIndex => audioFiles[middleC_Index + noteIndex])];
         if(playRoot){
-            audioFilesToPlay = [audioFiles[middleC_Index],...audioFilesToPlay]
+            audioFilesToPlay = [audioFiles[middleC_Index],...audioFilesToPlay];
         }
 
         let currentIndex = 0;
-        // let currentAudio = null;
+        let currentAudio = null; // Ensure each function has its own reference to the current audio
         let intervalId;
 
         const playNextAudio = () => {

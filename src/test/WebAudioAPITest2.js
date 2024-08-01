@@ -8,15 +8,8 @@ const VirtualPiano = () => {
 
   useEffect(() => {
     console.log("debug 1");
-    // Load your pre-recorded C note audio sample
-    // cNoteSampleRef.current = new Tone.Player("/sound/piano-88-notes/5-c.wav");
     cNoteSampleRef.current = new Tone.Player(`${process.env.PUBLIC_URL}/sound/piano-88-notes/0-a.wav`);
-    // cNoteSampleRef.current = new Tone.Player("A1.mp3", () => 
-    //   {console.log("loaded")}
-    // );
-    // cNoteSampleRef.current = new Tone.Player("https://tonejs.github.io/audio/casio/A1.mp3", () => 
-    //   {console.log("loaded")}
-    // );
+
     cNoteSampleRef.current.toDestination();
     console.log("debug 2 cNoteSampleRef:" + cNoteSampleRef);
 

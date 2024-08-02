@@ -1,7 +1,6 @@
-// import React, { useState } from 'react';
 import { useContext } from "react";
 import { AppContext } from "../App";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import * as noteData from "../utils/noteData";
@@ -25,9 +24,11 @@ const SettingsPage = () => {
 
     const navigate = useNavigate();
 
-    const noteChoiceIndex = [-12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    useEffect(() => {
+        setKeyRootNoteIndex(middleC_Index);
+    }, []);
 
-    setKeyRootNoteIndex(middleC_Index);
+    const noteChoiceIndex = [-12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
     const handleSelectNote = (index) => {
         if (selectedNoteIndex.includes(index)) {
@@ -110,7 +111,7 @@ const SettingsPage = () => {
             question: 'How many questions'
             , answer: (
                 <select
-                    value={numOfQuestions}
+                    value={numOfQuestions.toString()} // Ensure numOfQuestions is a single scalar value
                     onChange={(e) => setNumOfQuestions(parseInt(e.target.value))}
                     style={{marginTop: "16px"}}
                 >
@@ -126,7 +127,7 @@ const SettingsPage = () => {
             question: 'How many notes for each questions'
             , answer: (
                 <select
-                    value={numOfAnswers}
+                    value={numOfAnswers.toString()} // Ensure numOfAnswers is a single scalar value
                     onChange={(e) => setNumOfAnswers(parseInt(e.target.value))}
                     style={{marginTop: "16px"}}
                 >

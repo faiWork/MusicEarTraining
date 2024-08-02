@@ -7,6 +7,7 @@ import Layout from "../components/Layout";
 import * as noteData from "../utils/noteData";
 import * as noteDataUtil from "../utils/noteDataUtil";
 import QATable from '../components/QATable';
+import {middleC_Index} from '../utils/audioFiles';
 
 const SettingsPage = () => {
     const {
@@ -17,12 +18,16 @@ const SettingsPage = () => {
         numOfQuestions,
         setNumOfQuestions,
         numOfAnswers,
-        setNumOfAnswers
+        setNumOfAnswers,
+        keyRootNoteIndex,
+        setKeyRootNoteIndex
     } = useContext(AppContext);
 
     const navigate = useNavigate();
 
     const noteChoiceIndex = [-12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+    setKeyRootNoteIndex(middleC_Index);
 
     const handleSelectNote = (index) => {
         if (selectedNoteIndex.includes(index)) {
@@ -39,7 +44,7 @@ const SettingsPage = () => {
     };
 
     const handleStartTraining = () => {
-        navigate("/start-training", { state: { selectedNoteIndex, selectedAccidentalsType, numOfQuestions, numOfAnswers} });
+        navigate("/start-training", { state: { selectedNoteIndex, selectedAccidentalsType, numOfQuestions, numOfAnswers, keyRootNoteIndex} });
     };
 
     const headers = ["Setting", "Choice"];

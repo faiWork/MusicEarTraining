@@ -15,6 +15,7 @@ const App = () => {
   const [selectedAccidentalsType, setSelectedAccidentalsType] = useState(noteData.accidentalsType.sharp);
   const [numOfQuestions, setNumOfQuestions] = useState([10]);
   const [numOfAnswers, setNumOfAnswers] = useState([5]);
+  const [keyRootNoteIndex, setKeyRootNoteIndex] = useState();
 
   return (
     <AppContext.Provider
@@ -26,7 +27,9 @@ const App = () => {
         numOfQuestions,
         setNumOfQuestions,
         numOfAnswers,
-        setNumOfAnswers
+        setNumOfAnswers,
+        keyRootNoteIndex,
+        setKeyRootNoteIndex
       }}
     >
       <Router>

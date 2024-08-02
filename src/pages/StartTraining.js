@@ -7,7 +7,7 @@ import QATable from '../components/QATable';
 import * as noteData from "../utils/noteData";
 import * as noteDataUtil from "../utils/noteDataUtil";
 import '../styles/MyComponent.css';
-import {audioFiles, middleC_Index} from '../utils/audioFiles';
+import {audioFiles} from '../utils/audioFiles';
 import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';
 
@@ -20,7 +20,8 @@ const StartTraining = () => {
         numOfQuestions,
         setNumOfQuestions,
         numOfAnswers,
-        setNumOfAnswers
+        setNumOfAnswers,
+        keyRootNoteIndex
     } = useContext(AppContext);
     const navigate = useNavigate();
     const [selectedButton, setSelectedButton] = useState([]);
@@ -114,7 +115,7 @@ const StartTraining = () => {
 
     const playNoteFunction = (noteIndex) => {
         console.log("playNoteFunction start");
-        const audioFileToPlay = audioFiles[middleC_Index + noteIndex]; // Updated access to audio file
+        const audioFileToPlay = audioFiles[keyRootNoteIndex + noteIndex]; // Updated access to audio file
 
         console.log("audioFileToPlay.path:" + JSON.stringify(audioFileToPlay));
         let currentAudio = new Audio(audioFileToPlay);
@@ -125,9 +126,9 @@ const StartTraining = () => {
     };
 
     const playAllQuestionFunction = (playRoot) => {
-        let audioFilesToPlay = [...trainingQuestions.map(noteIndex => audioFiles[middleC_Index + noteIndex])];
+        let audioFilesToPlay = [...trainingQuestions.map(noteIndex => audioFiles[keyRootNoteIndex + noteIndex])];
         if(playRoot){
-            audioFilesToPlay = [audioFiles[middleC_Index],...audioFilesToPlay];
+            audioFilesToPlay = [audioFiles[keyRootNoteIndex],...audioFilesToPlay];
         }
 
         let currentIndex = 0;
@@ -292,6 +293,8 @@ const StartTraining = () => {
             {<h3>{"debug trainingQuestions:" + trainingQuestions.join(", ")}</h3>}
             {<h3>{"debug selectedNoteIndex:" + selectedNoteIndex.join(", ")}</h3>}
             {<h3>{"debug selectedAccidentalsType:" + selectedAccidentalsType}</h3>}
+            {<h3>{"debug keyRootNoteIndex:" + keyRootNoteIndex}</h3>}
+            
 
             <button onClick={handleBack}>Back</button>
 

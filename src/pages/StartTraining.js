@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AppContext } from "../App";
 import Layout from "../components/Layout";
@@ -24,7 +23,6 @@ const StartTraining = () => {
         setNumOfAnswers,
         keyRootNoteIndex
     } = useContext(AppContext);
-    const navigate = useNavigate();
     const [selectedButton, setSelectedButton] = useState([]);
     const [trainingQuestions, setTrainingQuestions] = useState([]);
     const [trainingAnswers, seTrainingAnswers] = useState([]);
@@ -51,10 +49,6 @@ const StartTraining = () => {
         console.log("generateTrainingQuestions numOfAnswers:" + numOfAnswers);
         console.log("generateTrainingQuestions randomQuestions:" + randomQuestions);
         setTrainingQuestions(randomQuestions);
-    };
-
-    const handleBack = () => {
-        navigate("/settings");
     };
 
     const eraseAnswerFunction = () => {

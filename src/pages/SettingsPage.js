@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { AppContext } from "../App";
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { usePageNavigation } from "../utils/usePageNavigation";
 import Layout from "../components/Layout";
 import * as noteData from "../utils/noteData";
 import * as noteDataUtil from "../utils/noteDataUtil";
@@ -22,7 +22,7 @@ const SettingsPage = () => {
         setKeyRootNoteIndex
     } = useContext(AppContext);
 
-    const navigate = useNavigate();
+    const { goToPageWithOptions } = usePageNavigation();
 
     useEffect(() => {
         setKeyRootNoteIndex(middleC_Index);
@@ -42,10 +42,6 @@ const SettingsPage = () => {
 
     const toggleSelectedAccidentalsType = () => {
         setSelectedAccidentalsType((prevType) => (prevType === noteData.accidentalsType.sharp ? noteData.accidentalsType.flat : noteData.accidentalsType.sharp));
-    };
-
-    const handleStartTraining = () => {
-        navigate("/start-training", { state: { selectedNoteIndex, selectedAccidentalsType, numOfQuestions, numOfAnswers, keyRootNoteIndex} });
     };
 
     const headers = ["Setting", "Choice"];
@@ -166,7 +162,7 @@ const SettingsPage = () => {
             {/*    })*/}
             {/*}</h3>*/}
 
-          <button onClick={handleStartTraining} style={{marginTop: "16px"}}>
+          <button onClick={() => goToPageWithOptions("/start-training", { state: { selectedNoteIndex, selectedAccidentalsType, numOfQuestions, numOfAnswers, keyRootNoteIndex} })} style={{marginTop: "16px"}}>
               Start Training
           </button>
       </Layout>

@@ -8,6 +8,7 @@ import * as noteData from "../utils/noteData";
 import * as noteDataUtil from "../utils/noteDataUtil";
 import '../styles/MyComponent.css';
 import {audioFiles} from '../utils/audioFiles';
+import { usePageNavigation } from "../utils/usePageNavigation";
 import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';
 
@@ -32,7 +33,7 @@ const StartTraining = () => {
     const [showNextQuestionButton, setShowNextQuestionButton] = useState(false);
     const [finalAnswerResponseMessage, setFinalAnswerResponseMessage] = useState('');
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(1);
-    
+    const { goToPage } = usePageNavigation();
 
     let currentAudio = null;
 
@@ -295,7 +296,7 @@ const StartTraining = () => {
             {<h3>{"debug keyRootNoteIndex:" + keyRootNoteIndex}</h3>}
             
 
-            <button onClick={handleBack}>Back</button>
+            <button onClick={() => goToPage("/settings")}>Back</button>
 
         </Layout>
     );

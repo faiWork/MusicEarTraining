@@ -1,17 +1,10 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { usePageNavigation } from "../utils/usePageNavigation";
 import Layout from "../components/Layout";
 
 const Home = () => {
-  const navigate = useNavigate();
 
-  const handleMelodyDictationClick = () => {
-    navigate("/settings");
-  };
-
-  const handleWebAudioAPITestClick = () => {
-    navigate("/web-audio-api-test");
-  };
+  const { goToPage } = usePageNavigation();
 
   return (
     <Layout>
@@ -43,7 +36,7 @@ const Home = () => {
               enjoy the process of improving your musical abilities.
             </p>
             <p> 
-              <button onClick={handleMelodyDictationClick}>
+              <button onClick={() => goToPage("/settings")}>
                 Melody Dictation
               </button>
             </p>

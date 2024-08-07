@@ -39,6 +39,7 @@ const StartTraining = () => {
         generateTrainingQuestions();
     }, [selectedNoteIndex]);
 
+    //QuestionAnswer functions =========================================
     const generateTrainingQuestions = () => {
         const randomQuestions = [];
 
@@ -66,8 +67,6 @@ const StartTraining = () => {
         // Update the trainingAnswers state with the modified array
         seTrainingAnswers([]);
     };
-
-    
 
     const checkFinalAnswerFunction = () => {
         // Check if the trainingQuestions array is equal to the trainingAnswers array
@@ -103,6 +102,13 @@ const StartTraining = () => {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
     };
 
+    const handleAnswer = (answer) => {
+        if (trainingAnswers.length < trainingQuestions.length) {
+            seTrainingAnswers([...trainingAnswers, answer]);
+        }
+    };
+
+    //Audio functions ================================================
     const pauseNoteFunction = () => {
         console.log("pauseNoteFunction currentAudio:" + currentAudio)
         currentAudio.pause();
@@ -174,12 +180,6 @@ const StartTraining = () => {
                 const noteDelay = (60 / bpm) * 1000; // Duration of each note in milliseconds
                 intervalId = setInterval(playNextAudio, noteDelay);
             }
-        }
-    };
-
-    const handleAnswer = (answer) => {
-        if (trainingAnswers.length < trainingQuestions.length) {
-            seTrainingAnswers([...trainingAnswers, answer]);
         }
     };
 

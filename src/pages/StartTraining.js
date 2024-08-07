@@ -118,7 +118,7 @@ const StartTraining = () => {
         const audioFileToPlay = audioFiles[keyRootNoteIndex + noteIndex]; // Updated access to audio file
 
         console.log("audioFileToPlay.path:" + JSON.stringify(audioFileToPlay));
-        let currentAudio = new Audio(audioFileToPlay);
+        currentAudio = new Audio(audioFileToPlay);
         currentAudio.volume = volume; // Set the volume for the current audio
         console.log("currentAudio before play:" + currentAudio);
         currentAudio.play();
@@ -132,7 +132,6 @@ const StartTraining = () => {
         }
 
         let currentIndex = 0;
-        let currentAudio = null; // Ensure each function has its own reference to the current audio
         let intervalId;
 
         const playNextAudio = () => {

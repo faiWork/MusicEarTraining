@@ -10,6 +10,7 @@ import {audioFiles} from '../utils/audioFiles';
 import { usePageNavigation } from "../utils/usePageNavigation";
 import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';
+import { generateTrainingQuestions, eraseAnswerFunction, eraseAllAnswerFunction, checkFinalAnswerFunction, handleNextQuestion, handleAnswer } from "../utils/questionAnswerUtils";
 
 const StartTraining = () => {
     const {
@@ -36,77 +37,77 @@ const StartTraining = () => {
     let currentAudio = null;
 
     useEffect(() => {
-        generateTrainingQuestions();
+        generateTrainingQuestions(selectedNoteIndex, numOfAnswers, setTrainingQuestions);
     }, [selectedNoteIndex]);
 
     //QuestionAnswer functions =========================================
-    const generateTrainingQuestions = () => {
-        const randomQuestions = [];
+    // const generateTrainingQuestions = () => {
+    //     const randomQuestions = [];
 
-        for (let i = 0; i < numOfAnswers; i++) {
-            const randomIndex = Math.floor(Math.random() * selectedNoteIndex.length);
-            randomQuestions.push(selectedNoteIndex[randomIndex]);
-        }
-        console.log("generateTrainingQuestions numOfAnswers:" + numOfAnswers);
-        console.log("generateTrainingQuestions randomQuestions:" + randomQuestions);
-        setTrainingQuestions(randomQuestions);
-    };
+    //     for (let i = 0; i < numOfAnswers; i++) {
+    //         const randomIndex = Math.floor(Math.random() * selectedNoteIndex.length);
+    //         randomQuestions.push(selectedNoteIndex[randomIndex]);
+    //     }
+    //     console.log("generateTrainingQuestions numOfAnswers:" + numOfAnswers);
+    //     console.log("generateTrainingQuestions randomQuestions:" + randomQuestions);
+    //     setTrainingQuestions(randomQuestions);
+    // };
 
-    const eraseAnswerFunction = () => {
-        // Make a copy of the trainingAnswers array
-        const updatedTrainingAnswers = [...trainingAnswers];
+    // const eraseAnswerFunction = () => {
+    //     // Make a copy of the trainingAnswers array
+    //     const updatedTrainingAnswers = [...trainingAnswers];
 
-        // Remove the last element from the copy
-        updatedTrainingAnswers.pop();
+    //     // Remove the last element from the copy
+    //     updatedTrainingAnswers.pop();
 
-        // Update the trainingAnswers state with the modified array
-        seTrainingAnswers(updatedTrainingAnswers);
-    };
+    //     // Update the trainingAnswers state with the modified array
+    //     seTrainingAnswers(updatedTrainingAnswers);
+    // };
 
-    const eraseAllAnswerFunction = () => {
-        // Update the trainingAnswers state with the modified array
-        seTrainingAnswers([]);
-    };
+    // const eraseAllAnswerFunction = () => {
+    //     // Update the trainingAnswers state with the modified array
+    //     seTrainingAnswers([]);
+    // };
 
-    const checkFinalAnswerFunction = () => {
-        // Check if the trainingQuestions array is equal to the trainingAnswers array
-        if (JSON.stringify(trainingQuestions) === JSON.stringify(trainingAnswers)) {
-            // Display the "Correct" message
-            setFinalAnswerResponseMessage("Correct");
+    // const checkFinalAnswerFunction = () => {
+    //     // Check if the trainingQuestions array is equal to the trainingAnswers array
+    //     if (JSON.stringify(trainingQuestions) === JSON.stringify(trainingAnswers)) {
+    //         // Display the "Correct" message
+    //         setFinalAnswerResponseMessage("Correct");
 
-            // Enable the "Next Question" button
-            setShowNextQuestionButton(true);
+    //         // Enable the "Next Question" button
+    //         setShowNextQuestionButton(true);
 
             
 
-        } else {
-            // Display an error message or handle the incorrect answer
-            setFinalAnswerResponseMessage("Incorrect");
-        }
-    };
+    //     } else {
+    //         // Display an error message or handle the incorrect answer
+    //         setFinalAnswerResponseMessage("Incorrect");
+    //     }
+    // };
 
-    const handleNextQuestion = () => {
-        // Generate a new question
-        generateTrainingQuestions();
+    // const handleNextQuestion = () => {
+    //     // Generate a new question
+    //     generateTrainingQuestions();
 
-        // Reset the trainingAnswers array
-        seTrainingAnswers([]);
+    //     // Reset the trainingAnswers array
+    //     seTrainingAnswers([]);
 
-        // Hide the "Next Question" button
-        setShowNextQuestionButton(false);
+    //     // Hide the "Next Question" button
+    //     setShowNextQuestionButton(false);
 
-        //Reset FinalAnswerResponseMessage
-        setFinalAnswerResponseMessage("");
+    //     //Reset FinalAnswerResponseMessage
+    //     setFinalAnswerResponseMessage("");
 
-        // // Increment the currentQuestionIndex
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-    };
+    //     // // Increment the currentQuestionIndex
+    //     setCurrentQuestionIndex(currentQuestionIndex + 1);
+    // };
 
-    const handleAnswer = (answer) => {
-        if (trainingAnswers.length < trainingQuestions.length) {
-            seTrainingAnswers([...trainingAnswers, answer]);
-        }
-    };
+    // const handleAnswer = (answer) => {
+    //     if (trainingAnswers.length < trainingQuestions.length) {
+    //         seTrainingAnswers([...trainingAnswers, answer]);
+    //     }
+    // };
 
     //Audio functions ================================================
     const pauseNoteFunction = () => {

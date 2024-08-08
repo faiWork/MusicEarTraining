@@ -28,8 +28,8 @@ export const checkFinalAnswerFunction = (trainingQuestions, trainingAnswers, set
     }
 };
 
-export const handleNextQuestion = (generateTrainingQuestions, seTrainingAnswers, setShowNextQuestionButton, setFinalAnswerResponseMessage, setCurrentQuestionIndex, currentQuestionIndex) => {
-    generateTrainingQuestions();
+export const handleNextQuestion = (selectedNoteIndex, numOfAnswers, setTrainingQuestions, seTrainingAnswers, setShowNextQuestionButton, setFinalAnswerResponseMessage, setCurrentQuestionIndex, currentQuestionIndex) => {
+    generateTrainingQuestions(selectedNoteIndex, numOfAnswers, setTrainingQuestions);
     seTrainingAnswers([]);
     setShowNextQuestionButton(false);
     setFinalAnswerResponseMessage("");

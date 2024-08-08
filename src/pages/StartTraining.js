@@ -255,10 +255,10 @@ const StartTraining = () => {
             question: '',
             answer:
                 <div>
-                    <button id="eraseButton" onClick={eraseAnswerFunction}>Erase</button>
-                    <button id="eraseAllButton" onClick={eraseAllAnswerFunction}>Erase All</button>
-                    <button id="finalAnswerButton" disabled={trainingAnswers.length !== trainingQuestions.length} onClick={checkFinalAnswerFunction}>Final Answer</button>
-                    {showNextQuestionButton && (<button onClick={handleNextQuestion}>Next Question</button>)}
+                    <button id="eraseButton" onClick={() => eraseAnswerFunction(trainingAnswers, seTrainingAnswers)}>Erase</button>
+                    <button id="eraseAllButton" onClick={() => eraseAllAnswerFunction(seTrainingAnswers)}>Erase All</button>
+                    <button id="finalAnswerButton" disabled={trainingAnswers.length !== trainingQuestions.length} onClick={() => checkFinalAnswerFunction(trainingQuestions, trainingAnswers, setFinalAnswerResponseMessage, setShowNextQuestionButton)}>Final Answer</button>
+                    {showNextQuestionButton && (<button onClick={() => handleNextQuestion(selectedNoteIndex, numOfAnswers, setTrainingQuestions, seTrainingAnswers, setShowNextQuestionButton, setFinalAnswerResponseMessage, setCurrentQuestionIndex, currentQuestionIndex)}>Next Question</button>)}
                 </div>
         },
         {
@@ -271,7 +271,7 @@ const StartTraining = () => {
                             className={`note-button ${selectedButton === item ? 'selected' : ''}`}
                             onMouseDown={() => setSelectedButton(item)}
                             onMouseUp={() => setSelectedButton(null)}
-                            onClick={() => handleAnswer(item)}
+                            onClick={() => handleAnswer(item , trainingAnswers, trainingQuestions, seTrainingAnswers)}
                         >
                             {noteDataUtil.getNoteName(item, "solfege", selectedAccidentalsType)}
                         </button>

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AppContext } from "../App";
 import Layout from "../components/Layout";
@@ -7,165 +6,106 @@ import QATable from '../components/QATable';
 import * as noteData from "../utils/noteData";
 import * as noteDataUtil from "../utils/noteDataUtil";
 import '../styles/MyComponent.css';
-import {audioFiles, middleC_Index} from '../utils/audioFiles';
+import {audioFiles} from '../utils/audioFiles';
+import { usePageNavigation } from "../utils/usePageNavigation";
 import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';
+import { generateTrainingQuestions, eraseAnswerFunction, eraseAllAnswerFunction, checkFinalAnswerFunction, handleNextQuestion, handleAnswer } from "../utils/questionAnswerUtils";
 
 const StartTraining = () => {
-    const {state} = useLocation();
-    const navigate = useNavigate();
+    const {
+        selectedNoteIndex,
+        setSelectedNoteIndex,
+        selectedAccidentalsType,
+        setSelectedAccidentalsType,
+        numOfQuestions,
+        setNumOfQuestions,
+        numOfAnswers,
+        setNumOfAnswers,
+        keyRootNoteIndex
+    } = useContext(AppContext);
     const [selectedButton, setSelectedButton] = useState([]);
     const [trainingQuestions, setTrainingQuestions] = useState([]);
     const [trainingAnswers, seTrainingAnswers] = useState([]);
     const [isPlaying, setIsPlaying] = useState(false);
     const [volume, setVolume] = useState(1); // Initialize volume to 1 (100%)
+    const [showNextQuestionButton, setShowNextQuestionButton] = useState(false);
+    const [finalAnswerResponseMessage, setFinalAnswerResponseMessage] = useState('');
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(1);
+    const { goToPage } = usePageNavigation();
+
     const [currentAudio, setCurrentAudio] = useState(null);
-    const [audioFilesToPlay, setAudioFilesToPlay] = useState([]);
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const [audioElements, setAudioElements] = useState([]);
+    const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
+    const [intervalId, setIntervalId] = useState(null);
 
     useEffect(() => {
-        generateTrainingQuestions();
-    }, [state.selectedNoteIndex]);
+        generateTrainingQuestions(selectedNoteIndex, numOfAnswers, setTrainingQuestions);
+    }, [selectedNoteIndex]);
 
-    // Initialize the currentAudio state when audioFilesToPlay changes
-    useEffect(() => {
-        if (audioFilesToPlay.length > 0) {
-            setCurrentAudio(new Audio(audioFilesToPlay[currentIndex]));
-        }
-    }, [audioFilesToPlay, currentIndex]);
-
-    // Clean up the currentAudio state when the component is unmounted
-    useEffect(() => {
-        return () => {
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-            }
-        };
-    }, [currentAudio]);
-
-    const generateTrainingQuestions = () => {
-        const selectedNoteIndex = state.selectedNoteIndex;
-        const randomQuestions = [];
-
-        for (let i = 0; i < state.numOfAnswers; i++) {
-            const randomIndex = Math.floor(Math.random() * selectedNoteIndex.length);
-            randomQuestions.push(selectedNoteIndex[randomIndex]);
-        }
-        console.log("generateTrainingQuestions state.numOfAnswers:" + state.numOfAnswers);
-        console.log("generateTrainingQuestions randomQuestions:" + randomQuestions);
-        setTrainingQuestions(randomQuestions);
-    };
-
-    const handleBack = () => {
-        navigate("/settings");
-    };
-
-    const eraseAnswerFunction = () => {
-        // Make a copy of the trainingAnswers array
-        const updatedTrainingAnswers = [...trainingAnswers];
-
-        // Remove the last element from the copy
-        updatedTrainingAnswers.pop();
-
-        // Update the trainingAnswers state with the modified array
-        seTrainingAnswers(updatedTrainingAnswers);
-    };
-
-    const finalAnswerFunction = () => {
-    };
-
+    //Audio functions ================================================
     const pauseNoteFunction = () => {
-        console.log("pauseNoteFunction currentAudio:" + currentAudio)
+        console.log("pauseNoteFunction currentAudio:" + JSON.stringify(currentAudio));
         if (currentAudio) {
-            if (!currentAudio.paused) {
-                currentAudio.pause();
-                setIsPlaying(false);
-            }
+            currentAudio.pause();
         }
-    }
+        audioElements.forEach((audio) => {
+            if (audio) {
+                audio.pause();
+            }
+        });
+        clearInterval(intervalId);
+        setIsPlaying(false);
+        setCurrentAudio(null);
+        setAudioElements([]);
+        setCurrentAudioIndex(0);
+    };
 
     const playNoteFunction = (noteIndex) => {
-        console.log("playNoteFunction start");
-        setAudioFilesToPlay([audioFiles[middleC_Index + noteIndex]]);
-
-        setCurrentIndex(0);
-        let intervalId;
-
-        const playNextAudio = () => {
-            if (currentIndex < audioFilesToPlay.length) {
-                if (currentAudio) {
-                    currentAudio.pause();
-                }
-                console.log("currentIndex):" + currentIndex);
-                console.log("new Audio(audioFilesToPlay[currentIndex]):" + new Audio(audioFilesToPlay[currentIndex]));
-                setCurrentAudio(new Audio(audioFilesToPlay[currentIndex]));
-                console.log("currentAudio before play:" + currentAudio);
-                if(currentAudio){
-                    currentAudio.volume = volume; // Set the volume for the current audio
-                    currentAudio.play();
-                    console.log("currentAudio after play:" + currentAudio);
-                    setCurrentIndex(currentIndex + 1);
-                }
-
-            } else {
-                clearInterval(intervalId);
-                setIsPlaying(false);
-            }
-        };
-
-        console.log("isPlaying:" + isPlaying);
-        console.log("currentAudio:" + currentAudio);
-        if (isPlaying) {
-            clearInterval(intervalId);
-            if (currentAudio) {
-                console.log("pause");
-                currentAudio.pause();
-            }
-            setIsPlaying(false);
-        } else {
-            setIsPlaying(true);
-            setCurrentAudio(new Audio(audioFilesToPlay[currentIndex])); // Initialize currentAudio here
-            const bpm = 80;
-            const noteDelay = (60 / bpm) * 1000; // Duration of each note in milliseconds
-            intervalId = setInterval(playNextAudio, noteDelay);
-
-        }
-    }
+        const audioFileToPlay = audioFiles[keyRootNoteIndex + noteIndex]; // Get the audio file path based on the note index
+    
+        const audio = new Audio(audioFileToPlay); // Create a new Audio object
+        audio.volume = volume; // Set the volume for the audio
+        audio.play(); // Play the audio
+    
+        // Update the currentAudio state with the new audio object
+        setCurrentAudio(audio);
+    };
 
     const playAllQuestionFunction = (playRoot) => {
-        setAudioFilesToPlay([...trainingQuestions.map(noteIndex => audioFiles[middleC_Index + noteIndex])]);
+        let audioFilesToPlay = [...trainingQuestions.map(noteIndex => audioFiles[keyRootNoteIndex + noteIndex])];
         if(playRoot){
-            setAudioFilesToPlay([audioFiles[middleC_Index],...audioFilesToPlay]);
+            audioFilesToPlay = [audioFiles[keyRootNoteIndex],...audioFilesToPlay];
         }
 
-        setCurrentIndex(0);
-        // let currentAudio = null;
-        let intervalId;
+        setAudioElements([]);
+        setCurrentAudioIndex(0);
+        setIntervalId(null);
 
         const playNextAudio = () => {
-            if (currentIndex < audioFilesToPlay.length) {
-                if (currentAudio) {
-                    currentAudio.pause();
+            if (currentAudioIndex < audioFilesToPlay.length) {
+                if (audioElements[currentAudioIndex]) {
+                    audioElements[currentAudioIndex].pause();
                 }
-                setCurrentAudio(new Audio(audioFilesToPlay[currentIndex]));
-                currentAudio.volume = volume; // Set the volume for the current audio
-                currentAudio.play();
-                setCurrentIndex(currentIndex + 1);
+                audioElements[currentAudioIndex] = new Audio(audioFilesToPlay[currentAudioIndex]);
+                audioElements[currentAudioIndex].volume = volume;
+                audioElements[currentAudioIndex].play();
+                setCurrentAudioIndex(currentAudioIndex + 1);
             } else {
                 clearInterval(intervalId);
                 setIsPlaying(false);
+                setCurrentAudioIndex(0); // Reset the audio index
             }
         };
 
         const playRootAudio = () => {
-            if (currentAudio) {
-                currentAudio.pause();
+            if (currentAudioIndex > 0 && audioElements[currentAudioIndex - 1]) {
+                audioElements[currentAudioIndex - 1].pause();
             }
-            setCurrentAudio(new Audio(audioFilesToPlay[currentIndex]));
-            currentAudio.volume = volume; // Set the volume for the current audio
-            currentAudio.play();
-            setCurrentIndex(currentIndex + 1)
+            audioElements[currentAudioIndex] = new Audio(audioFilesToPlay[currentAudioIndex]);
+            audioElements[currentAudioIndex].volume = volume;
+            audioElements[currentAudioIndex].play();
+            setCurrentAudioIndex(currentAudioIndex + 1);
         };
 
         if (isPlaying) {
@@ -191,24 +131,17 @@ const StartTraining = () => {
         }
     };
 
-    const handleAnswer = (answer) => {
-        if (trainingAnswers.length < trainingQuestions.length) {
-            seTrainingAnswers([...trainingAnswers, answer]);
-        }
-    };
-
     const handleVolumeChange = (event) => {
         setVolume(event.target.value);
     };
 
     const initialQuestions = [
         {
-            question: 'Question:',
+            question: 'Question(' + currentQuestionIndex + '/' + numOfQuestions + '):',
             answer: (
                 <div>
                     {trainingQuestions.map((item, index) => (
                         <button
-                            id={"trainingQuestionButton" + index}
                             key={"A" + index}
                             className={`note-button ${selectedButton === ("A" + index) ? 'selected' : ''}`}
                             onClick={() => playNoteFunction(item)}
@@ -220,7 +153,7 @@ const StartTraining = () => {
             ),
         },
         {
-            question: 'Action:',
+            question: 'Sound:',
             answer:
                 <div>
                     <button id="playAllQuestionButton" onClick={() => playAllQuestionFunction(false)}>
@@ -255,30 +188,39 @@ const StartTraining = () => {
         {
             question: 'Answer:',
             answer: trainingAnswers.map((item, index) =>
-                noteDataUtil.getNoteName(item, "solfege", state.selectedAccidentalsType)
+                noteDataUtil.getNoteName(item, "solfege", selectedAccidentalsType)
             ).join(", ")
+        },
+        {
+            question: '',
+            answer: 
+                <div>
+                    {<h3>{finalAnswerResponseMessage}</h3>}
+                </div>
         },
         {
             question: '',
             answer:
                 <div>
-                    <button id="eraseButton" onClick={eraseAnswerFunction}>Erase</button>
-                    <button id="finalAnswerButton" disabled={trainingAnswers.length !== trainingQuestions.length} onClick={finalAnswerFunction}>Final Answer</button>
+                    <button id="eraseButton" onClick={() => eraseAnswerFunction(trainingAnswers, seTrainingAnswers)}>Erase</button>
+                    <button id="eraseAllButton" onClick={() => eraseAllAnswerFunction(seTrainingAnswers)}>Erase All</button>
+                    <button id="finalAnswerButton" disabled={trainingAnswers.length !== trainingQuestions.length} onClick={() => checkFinalAnswerFunction(trainingQuestions, trainingAnswers, setFinalAnswerResponseMessage, setShowNextQuestionButton)}>Final Answer</button>
+                    {showNextQuestionButton && (<button onClick={() => handleNextQuestion(selectedNoteIndex, numOfAnswers, setTrainingQuestions, seTrainingAnswers, setShowNextQuestionButton, setFinalAnswerResponseMessage, setCurrentQuestionIndex, currentQuestionIndex)}>Next Question</button>)}
                 </div>
         },
         {
             question: '',
             answer: (
                 <div>
-                    {state.selectedNoteIndex.map((item, index) => (
+                    {selectedNoteIndex.map((item, index) => (
                         <button
                             key={item}
                             className={`note-button ${selectedButton === item ? 'selected' : ''}`}
                             onMouseDown={() => setSelectedButton(item)}
                             onMouseUp={() => setSelectedButton(null)}
-                            onClick={() => handleAnswer(item)}
+                            onClick={() => handleAnswer(item , trainingAnswers, trainingQuestions, seTrainingAnswers)}
                         >
-                            {noteDataUtil.getNoteName(item, "solfege", state.selectedAccidentalsType)}
+                            {noteDataUtil.getNoteName(item, "solfege", selectedAccidentalsType)}
                         </button>
                     ))}
                 </div>
@@ -291,10 +233,12 @@ const StartTraining = () => {
             <QATable title="Melody Dictation Training" initialQuestions={initialQuestions}/>
 
             {<h3>{"debug trainingQuestions:" + trainingQuestions.join(", ")}</h3>}
-            {<h3>{"debug selectedNoteIndex:" + state.selectedNoteIndex.join(", ")}</h3>}
-            {<h3>{"debug selectedAccidentalsType:" + state.selectedAccidentalsType}</h3>}
+            {<h3>{"debug selectedNoteIndex:" + selectedNoteIndex.join(", ")}</h3>}
+            {<h3>{"debug selectedAccidentalsType:" + selectedAccidentalsType}</h3>}
+            {<h3>{"debug keyRootNoteIndex:" + keyRootNoteIndex}</h3>}
+            
 
-            <button onClick={handleBack}>Back</button>
+            <button onClick={() => goToPage("/settings")}>Back</button>
 
         </Layout>
     );

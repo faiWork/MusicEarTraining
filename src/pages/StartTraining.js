@@ -34,7 +34,7 @@ const StartTraining = () => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(1);
     const { goToPage } = usePageNavigation();
 
-    let currentAudio = null;
+    const [currentAudio, setCurrentAudio] = useState(null);
 
     useEffect(() => {
         generateTrainingQuestions(selectedNoteIndex, numOfAnswers, setTrainingQuestions);
@@ -42,20 +42,23 @@ const StartTraining = () => {
 
     //Audio functions ================================================
     const pauseNoteFunction = () => {
-        console.log("pauseNoteFunction currentAudio:" + currentAudio)
-        currentAudio.pause();
+        console.log("pauseNoteFunction currentAudio:" + JSON.stringify(currentAudio))
+        if (currentAudio) {
+            currentAudio.pause();
+        }
     }
 
     const playNoteFunction = (noteIndex) => {
-        console.log("playNoteFunction start");
-        const audioFileToPlay = audioFiles[keyRootNoteIndex + noteIndex]; // Updated access to audio file
-
-        console.log("audioFileToPlay.path:" + JSON.stringify(audioFileToPlay));
-        currentAudio = new Audio(audioFileToPlay);
-        currentAudio.volume = volume; // Set the volume for the current audio
-        console.log("currentAudio before play:" + currentAudio);
-        currentAudio.play();
-        console.log("currentAudio after play:" + currentAudio);
+        if (!isPlaying) {
+            const audioFileToPlay = audioFiles[keyRootNoteIndex + noteIndex]; // Get the audio file path based on the note index
+        
+            const audio = new Audio(audioFileToPlay); // Create a new Audio object
+            audio.volume = volume; // Set the volume for the audio
+            audio.play(); // Play the audio
+        
+            // Update the currentAudio state with the new audio object
+            setCurrentAudio(audio);
+        }
     };
 
     const playAllQuestionFunction = (playRoot) => {
@@ -64,32 +67,34 @@ const StartTraining = () => {
             audioFilesToPlay = [audioFiles[keyRootNoteIndex],...audioFilesToPlay];
         }
 
-        let currentIndex = 0;
         let intervalId;
-
+        let currentAudioIndex = 0;
+        let audioElements = [];
+        
         const playNextAudio = () => {
-            if (currentIndex < audioFilesToPlay.length) {
-                if (currentAudio) {
-                    currentAudio.pause();
+            if (currentAudioIndex < audioFilesToPlay.length) {
+                if (audioElements[currentAudioIndex-1]) { //stop the previous note to prevent the union sound
+                    audioElements[currentAudioIndex-1].pause();
                 }
-                currentAudio = new Audio(audioFilesToPlay[currentIndex]);
-                currentAudio.volume = volume; // Set the volume for the current audio
-                currentAudio.play();
-                currentIndex++;
+                audioElements[currentAudioIndex] = new Audio(audioFilesToPlay[currentAudioIndex]);
+                audioElements[currentAudioIndex].volume = volume;
+                audioElements[currentAudioIndex].play();
+                currentAudioIndex++;
             } else {
                 clearInterval(intervalId);
                 setIsPlaying(false);
+                currentAudioIndex = 0; // Reset the audio index
             }
         };
-
+        
         const playRootAudio = () => {
-            if (currentAudio) {
-                currentAudio.pause();
+            if (currentAudioIndex > 0 && audioElements[currentAudioIndex - 1]) {
+                audioElements[currentAudioIndex - 1].pause();
             }
-            currentAudio = new Audio(audioFilesToPlay[currentIndex]);
-            currentAudio.volume = volume; // Set the volume for the current audio
-            currentAudio.play();
-            currentIndex++;
+            audioElements[currentAudioIndex] = new Audio(audioFilesToPlay[currentAudioIndex]);
+            audioElements[currentAudioIndex].volume = volume;
+            audioElements[currentAudioIndex].play();
+            currentAudioIndex++;
         };
 
         if (isPlaying) {
@@ -97,7 +102,7 @@ const StartTraining = () => {
             if (currentAudio) {
                 currentAudio.pause();
             }
-            setIsPlaying(false);
+            // setIsPlaying(false);
         } else {
             setIsPlaying(true);
             if(playRoot) {

@@ -75,13 +75,29 @@ const StartTraining = () => {
         }
     };
 
-    const playNextAudio = (audioFilesToPlay) => {
-        console.log("playNextAudio currentAudioIndex:" + currentAudioIndex)
-        console.log("playNextAudio intervalId:" + intervalId)
-        if (currentAudioIndex < audioFilesToPlay.length) {
-            if (audioElements[currentAudioIndex-1]) { //stop the previous note to prevent the union sound
-                audioElements[currentAudioIndex-1].pause();
+    const fadeOut = (audio, duration) => {
+        const fadeOutInterval = 50; // Interval in milliseconds
+        const fadeOutSteps = duration / fadeOutInterval;
+        let currentVolume = audio.volume;
+        const volumeDecrease = currentVolume / fadeOutSteps;
+    
+        const fadeOutIntervalId = setInterval(() => {
+            if (currentVolume > 0) {
+                currentVolume -= volumeDecrease;
+                audio.volume = currentVolume < 0 ? 0 : currentVolume;
+            } else {
+                clearInterval(fadeOutIntervalId);
+                audio.pause();
             }
+        }, fadeOutInterval);
+    };
+    
+    const playNextAudio = (audioFilesToPlay) => {
+        if (currentAudioIndex < audioFilesToPlay.length) {
+            if (audioElements[currentAudioIndex - 1]) {
+                fadeOut(audioElements[currentAudioIndex - 1], 500); // 500 ms fade-out
+            }
+            
             audioElements[currentAudioIndex] = new Audio(audioFilesToPlay[currentAudioIndex]);
             setStateAudioElements(audioElements);
             audioElements[currentAudioIndex].volume = volume;

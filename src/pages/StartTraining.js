@@ -204,7 +204,7 @@ const StartTraining = () => {
                 </div>
         },
         {
-            question: 'Question(' + currentQuestionIndex + '/' + numOfQuestions + '):',
+            question: 'Question:',
             answer: (
                 <div>
                     {trainingQuestions.map((item, index) => (

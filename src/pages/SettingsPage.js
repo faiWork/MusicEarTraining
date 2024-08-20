@@ -84,10 +84,10 @@ const SettingsPage = () => {
           question: 'Select notes by scale/mode'
           , answer: 'Buttons/OptionList'
         },
-        {
-          question: 'Play the note when answering the note'
-          , answer: 'Yes/No'
-        },
+        // {
+        //   question: 'Play the note when answering the note'
+        //   , answer: 'Yes/No'
+        // }, // move this to the StartTraining Page
         {
           question: 'Random Key or Fix Key(up to 5 keys)' // two buttons
           , answer: '5 dropdown if Fix Key is selected'
@@ -104,7 +104,7 @@ const SettingsPage = () => {
                 </button>
         },
         {
-            question: 'How many questions'
+            question: 'How many arounds of question?'
             , answer: (
                 <select
                     value={numOfQuestions.toString()} // Ensure numOfQuestions is a single scalar value

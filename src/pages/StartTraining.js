@@ -167,20 +167,8 @@ const StartTraining = () => {
 
     const initialQuestions = [
         {
-            question: 'Question(' + currentQuestionIndex + '/' + numOfQuestions + '):',
-            answer: (
-                <div>
-                    {trainingQuestions.map((item, index) => (
-                        <button
-                            key={"A" + index}
-                            className={`note-button ${selectedButton === ("A" + index) ? 'selected' : ''}`}
-                            onClick={() => playNoteFunction(item)}
-                        >
-                            {index + 1}
-                        </button>
-                    ))}
-                </div>
-            ),
+            question: 'Around:',
+            answer: currentQuestionIndex + ' of ' + numOfQuestions
         },
         {
             question: 'Sound:',
@@ -214,6 +202,22 @@ const StartTraining = () => {
                     />
                     <VolumeUp/>
                 </div>
+        },
+        {
+            question: 'Question(' + currentQuestionIndex + '/' + numOfQuestions + '):',
+            answer: (
+                <div>
+                    {trainingQuestions.map((item, index) => (
+                        <button
+                            key={"A" + index}
+                            className={`note-button ${selectedButton === ("A" + index) ? 'selected' : ''}`}
+                            onClick={() => playNoteFunction(item)}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                </div>
+            ),
         },
         {
             question: 'Answer:',

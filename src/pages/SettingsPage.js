@@ -18,6 +18,8 @@ const SettingsPage = () => {
         setNumOfQuestions,
         numOfAnswers,
         setNumOfAnswers,
+        selectedKeys,
+        setSelectedKeys,
         keyRootNoteIndex,
         setKeyRootNoteIndex
     } = useContext(AppContext);
@@ -89,8 +91,24 @@ const SettingsPage = () => {
         //   , answer: 'Yes/No'
         // }, // move this to the StartTraining Page
         {
-          question: 'Random Key or Fix Key(up to 5 keys)' // two buttons
-          , answer: '5 dropdown if Fix Key is selected'
+            question: 'Key Selection (up to 5 keys)',
+            answer: (
+              <select
+                value={selectedKeys[0].selectedKey + ""} // Ensure numOfQuestions is a single scalar value
+                onChange={(e) => {
+                //   const updatedKeys = selectedKeys;
+                  selectedKeys[0].selectedKey = e.target.selectedIndex;
+                  setSelectedKeys(selectedKeys);
+                  console.log("selectedKeys:" + JSON.stringify(selectedKeys));
+                }}
+              >
+                {noteData.keyName.map((key, index) => (
+                  <option key={key} value={key}>
+                    {key}
+                  </option>
+                ))}
+              </select>
+            )
         },
         {
           question: 'Single Note Mode/Chord Note Mode'
@@ -109,7 +127,6 @@ const SettingsPage = () => {
                 <select
                     value={numOfQuestions.toString()} // Ensure numOfQuestions is a single scalar value
                     onChange={(e) => setNumOfQuestions(parseInt(e.target.value))}
-                    style={{marginTop: "16px"}}
                 >
                     {Array.from({ length: MAX_QUESTIONS - MIN_QUESTIONS + 1 }, (_, i) => i + MIN_QUESTIONS).map((num) => (
                         <option key={num} value={num}>
@@ -125,7 +142,6 @@ const SettingsPage = () => {
                 <select
                     value={numOfAnswers.toString()} // Ensure numOfAnswers is a single scalar value
                     onChange={(e) => setNumOfAnswers(parseInt(e.target.value))}
-                    style={{marginTop: "16px"}}
                 >
                     {Array.from({ length: MAX_ANSWERS - MIN_ANSWERS + 1 }, (_, i) => i + MIN_ANSWERS).map((num) => (
                         <option key={num} value={num}>
@@ -154,6 +170,7 @@ const SettingsPage = () => {
 
             <QATable title="Melody Dictation Setting" initialQuestions={initialQuestions} headers={headers}/>
 
+            <h3>{"debug selectedKeys:" + JSON.stringify(selectedKeys)}</h3>
             {/*<h3>{"debug selectedNoteIndex:" + selectedNoteIndex}</h3>*/}
             {/*<h3>{"debug selectedAccidentalsType:" + selectedAccidentalsType}</h3>*/}
             {/*<h3>{"debug noteChoiceIndex to name:" +*/}
@@ -162,7 +179,7 @@ const SettingsPage = () => {
             {/*    })*/}
             {/*}</h3>*/}
 
-          <button onClick={() => goToPageWithOptions("/start-training", { state: { selectedNoteIndex, selectedAccidentalsType, numOfQuestions, numOfAnswers, keyRootNoteIndex} })} style={{marginTop: "16px"}}>
+          <button onClick={() => goToPageWithOptions("/start-training", { state: { selectedNoteIndex, selectedAccidentalsType, numOfQuestions, numOfAnswers, selectedKeys, keyRootNoteIndex} })} style={{marginTop: "16px"}}>
               Start Training
           </button>
       </Layout>

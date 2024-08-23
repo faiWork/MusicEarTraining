@@ -15,6 +15,7 @@ const App = () => {
   const [selectedAccidentalsType, setSelectedAccidentalsType] = useState(noteData.accidentalsType.sharp);
   const [numOfQuestions, setNumOfQuestions] = useState([10]);
   const [numOfAnswers, setNumOfAnswers] = useState([5]);
+  const [selectedKeys, setSelectedKeys] = useState([{"index": 0, "selectedKey": 0}]);
   const [keyRootNoteIndex, setKeyRootNoteIndex] = useState();
 
   return (
@@ -28,6 +29,8 @@ const App = () => {
         setNumOfQuestions,
         numOfAnswers,
         setNumOfAnswers,
+        selectedKeys,
+        setSelectedKeys,
         keyRootNoteIndex,
         setKeyRootNoteIndex
       }}

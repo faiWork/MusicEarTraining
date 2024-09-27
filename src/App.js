@@ -5,7 +5,7 @@ import StartTraining from "./pages/StartTraining";
 import Home from "./pages/Home";
 import WebAudioAPITest from "./test/WebAudioAPITest";
 import WebAudioAPITest2 from "./test/WebAudioAPITest2";
-import { HashRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import * as noteData from "./utils/noteData";
 
 export const AppContext = createContext();

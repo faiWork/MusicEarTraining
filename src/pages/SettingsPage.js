@@ -97,9 +97,14 @@ const SettingsPage = () => {
                 value={selectedKeys[0].selectedKey + ""} // Ensure numOfQuestions is a single scalar value
                 onChange={(e) => {
                   const updatedKeys = [...selectedKeys]; // Create a copy of the selectedKeys array
-                  updatedKeys[0].selectedKey = e.target.value; // Update the selectedKey with the new value
+                  updatedKeys[0].selectedKey = e.target.value; // Update the updatedKeys[].selectedKey with the new value
+                  updatedKeys[0].index = noteData.keyName.indexOf(updatedKeys[0].selectedKey); // Update the updatedKeys.index with the new value
                   setSelectedKeys(updatedKeys); // Update the state with the new array
-                  console.log("selectedKeys:" + JSON.stringify(updatedKeys));
+                  
+                  setKeyRootNoteIndex(middleC_Index + updatedKeys[0].index);
+                //   console.log("selectedKeys:" + JSON.stringify(updatedKeys));
+                //   console.log("middleC_Index + updatedKeys:" + JSON.stringify(middleC_Index + updatedKeys[0].index));
+                  
                 }}
               >
                 {noteData.keyName.map((key, index) => (

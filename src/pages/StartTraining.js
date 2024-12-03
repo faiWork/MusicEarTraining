@@ -22,7 +22,6 @@ const StartTraining = () => {
         setNumOfQuestions,
         numOfAnswers,
         setNumOfAnswers,
-        keyRootNoteIndex,
         selectedKeys
     } = useContext(AppContext);
     const [selectedButton, setSelectedButton] = useState([]);
@@ -65,7 +64,7 @@ const StartTraining = () => {
 
     const playNoteFunction = (noteIndex) => {
         if (!isPlaying) {
-            const audioFileToPlay = audioFiles[keyRootNoteIndex + noteIndex]; // Get the audio file path based on the note index
+            const audioFileToPlay = audioFiles[selectedKeys[0].keyRootNoteIndex + noteIndex]; // Get the audio file path based on the note index
         
             const audio = new Audio(audioFileToPlay); // Create a new Audio object
             audio.volume = volume; // Set the volume for the audio
@@ -113,9 +112,9 @@ const StartTraining = () => {
     };
 
     const playAllQuestionFunction = (playRoot) => {
-        let audioFilesToPlay = [...trainingQuestions.map(noteIndex => audioFiles[keyRootNoteIndex + noteIndex])];
+        let audioFilesToPlay = [...trainingQuestions.map(noteIndex => audioFiles[selectedKeys[0].keyRootNoteIndex + noteIndex])];
         if(playRoot){
-            audioFilesToPlay = [audioFiles[keyRootNoteIndex],...audioFilesToPlay];
+            audioFilesToPlay = [audioFiles[selectedKeys[0].keyRootNoteIndex],...audioFilesToPlay];
         }
 
         if(intervalId){
@@ -274,7 +273,7 @@ const StartTraining = () => {
             {<h3>{"debug trainingQuestions:" + trainingQuestions.join(", ")}</h3>}
             {<h3>{"debug selectedNoteIndex:" + selectedNoteIndex.join(", ")}</h3>}
             {<h3>{"debug selectedAccidentalsType:" + selectedAccidentalsType}</h3>}
-            {<h3>{"debug keyRootNoteIndex:" + keyRootNoteIndex}</h3>}
+            <h3>{"debug selectedKeys:" + JSON.stringify(selectedKeys)}</h3>
             
 
             <button onClick={() => goToPage("/settings")}>Back</button>

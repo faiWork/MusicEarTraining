@@ -15,8 +15,7 @@ const App = () => {
   const [selectedAccidentalsType, setSelectedAccidentalsType] = useState(noteData.accidentalsType.sharp);
   const [numOfQuestions, setNumOfQuestions] = useState([10]);
   const [numOfAnswers, setNumOfAnswers] = useState([5]);
-  const [selectedKeys, setSelectedKeys] = useState([{"index": 0, "selectedKey": 0}]);
-  const [keyRootNoteIndex, setKeyRootNoteIndex] = useState();
+  const [selectedKeys, setSelectedKeys] = useState([{"index": 0, "selectedKey": 0, "keyRootNoteIndex": -1}]);
 
   return (
     <AppContext.Provider
@@ -30,9 +29,7 @@ const App = () => {
         numOfAnswers,
         setNumOfAnswers,
         selectedKeys,
-        setSelectedKeys,
-        keyRootNoteIndex,
-        setKeyRootNoteIndex
+        setSelectedKeys
       }}
     >
       <Router>

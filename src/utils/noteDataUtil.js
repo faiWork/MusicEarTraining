@@ -66,3 +66,11 @@ export function getMidiNote (noteIndex, accidentalsType) {
   const midiNote = octave * 12 + noteData.englishSharpName.indexOf(noteName);
   return midiNote;
 };
+
+export function updateSelectedKeys(selectedKeys, keyName, middleC_Index, setSelectedKeys) {
+    const updatedKeys = [...selectedKeys]; // Create a copy of the selectedKeys array
+    updatedKeys[0].selectedKey = keyName; // Update the updatedKeys[].selectedKey with the new value
+    updatedKeys[0].index = noteData.keyName.indexOf(updatedKeys[0].selectedKey); // Update the updatedKeys.index with the new value
+    updatedKeys[0].keyRootNoteIndex = (middleC_Index + updatedKeys[0].index);
+    setSelectedKeys(updatedKeys);
+}

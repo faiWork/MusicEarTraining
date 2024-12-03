@@ -19,16 +19,14 @@ const SettingsPage = () => {
         numOfAnswers,
         setNumOfAnswers,
         selectedKeys,
-        setSelectedKeys,
-        keyRootNoteIndex,
-        setKeyRootNoteIndex
+        setSelectedKeys
     } = useContext(AppContext);
 
     const { goToPageWithOptions } = usePageNavigation();
 
     useEffect(() => {
-        if(!!!keyRootNoteIndex){
-            setKeyRootNoteIndex(middleC_Index);
+        if(!!!selectedKeys[0].keyRootNoteIndex || selectedKeys[0].keyRootNoteIndex == -1){
+            noteDataUtil.updateSelectedKeys(selectedKeys, "C", middleC_Index, setSelectedKeys);
         }
     }, []);
 
@@ -98,15 +96,7 @@ const SettingsPage = () => {
               <select
                 value={selectedKeys[0].selectedKey + ""} // Ensure numOfQuestions is a single scalar value
                 onChange={(e) => {
-                  const updatedKeys = [...selectedKeys]; // Create a copy of the selectedKeys array
-                  updatedKeys[0].selectedKey = e.target.value; // Update the updatedKeys[].selectedKey with the new value
-                  updatedKeys[0].index = noteData.keyName.indexOf(updatedKeys[0].selectedKey); // Update the updatedKeys.index with the new value
-                  setSelectedKeys(updatedKeys); // Update the state with the new array
-                  
-                  setKeyRootNoteIndex(middleC_Index + updatedKeys[0].index);
-                //   console.log("selectedKeys:" + JSON.stringify(updatedKeys));
-                //   console.log("middleC_Index + updatedKeys:" + JSON.stringify(middleC_Index + updatedKeys[0].index));
-                  
+                  noteDataUtil.updateSelectedKeys(selectedKeys, e.target.value, middleC_Index, setSelectedKeys);
                 }}
               >
                 {noteData.keyName.map((key, index) => (
@@ -178,7 +168,6 @@ const SettingsPage = () => {
             <QATable title="Melody Dictation Setting" initialQuestions={initialQuestions} headers={headers}/>
 
             <h3>{"debug selectedKeys:" + JSON.stringify(selectedKeys)}</h3>
-            {<h3>{"debug keyRootNoteIndex:" + keyRootNoteIndex}</h3>}
             {/*<h3>{"debug selectedNoteIndex:" + selectedNoteIndex}</h3>*/}
             {/*<h3>{"debug selectedAccidentalsType:" + selectedAccidentalsType}</h3>*/}
             {/*<h3>{"debug noteChoiceIndex to name:" +*/}
@@ -187,7 +176,7 @@ const SettingsPage = () => {
             {/*    })*/}
             {/*}</h3>*/}
 
-          <button onClick={() => goToPageWithOptions("/start-training", { state: { selectedNoteIndex, selectedAccidentalsType, numOfQuestions, numOfAnswers, selectedKeys, keyRootNoteIndex} })} style={{marginTop: "16px"}}>
+          <button onClick={() => goToPageWithOptions("/start-training", { state: { selectedNoteIndex, selectedAccidentalsType, numOfQuestions, numOfAnswers, selectedKeys} })} style={{marginTop: "16px"}}>
               Start Training
           </button>
       </Layout>

@@ -21,8 +21,7 @@ const StartTraining = () => {
         numOfQuestions,
         setNumOfQuestions,
         numOfAnswers,
-        setNumOfAnswers,
-        keyRootNoteIndex
+        setNumOfAnswers
     } = useContext(AppContext);
     const [selectedButton, setSelectedButton] = useState([]);
     const [trainingQuestions, setTrainingQuestions] = useState([]);

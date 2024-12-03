@@ -176,6 +176,7 @@ const SettingsPage = () => {
             <QATable title="Melody Dictation Setting" initialQuestions={initialQuestions} headers={headers}/>
 
             <h3>{"debug selectedKeys:" + JSON.stringify(selectedKeys)}</h3>
+            {<h3>{"debug keyRootNoteIndex:" + keyRootNoteIndex}</h3>}
             {/*<h3>{"debug selectedNoteIndex:" + selectedNoteIndex}</h3>*/}
             {/*<h3>{"debug selectedAccidentalsType:" + selectedAccidentalsType}</h3>*/}
             {/*<h3>{"debug noteChoiceIndex to name:" +*/}

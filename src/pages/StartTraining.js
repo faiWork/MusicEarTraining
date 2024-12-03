@@ -22,7 +22,8 @@ const StartTraining = () => {
         setNumOfQuestions,
         numOfAnswers,
         setNumOfAnswers,
-        keyRootNoteIndex
+        keyRootNoteIndex,
+        selectedKeys
     } = useContext(AppContext);
     const [selectedButton, setSelectedButton] = useState([]);
     const [trainingQuestions, setTrainingQuestions] = useState([]);
@@ -169,6 +170,10 @@ const StartTraining = () => {
         {
             question: 'Around:',
             answer: currentQuestionIndex + ' of ' + numOfQuestions
+        },
+        {
+            question: 'Key:',
+            answer: selectedKeys[0].selectedKey
         },
         {
             question: 'Sound:',

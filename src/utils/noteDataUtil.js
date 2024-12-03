@@ -5,6 +5,10 @@ Number.prototype.mod = function(b) {
     return ((this % b) + b) % b;
 }
 
+export function getAccidentalsType(type) {
+    return type === "sharp" ? "Sharp" : "Flat";
+}
+
 /**
  * Returns the sharp solfege name for the given scale degree.
  * @param {number} degree - The scale degree (0-11).
@@ -23,16 +27,36 @@ export function getFlatSolfegeName(degree) {
     return noteData.solfegeFlatName[degree.mod(12)];
 }
 
-export function getAccidentalsType(type) {
-    return type === "sharp" ? "Sharp" : "Flat";
+export function getEnglishSharpName(degree) {
+    return noteData.englishSharpName[degree.mod(12)]  ;
 }
 
-export function getNoteName(degree, selectedNoteType, selectedAccidentalsType) {
+export function getEnglishFlatName(degree) {
+    return noteData.englishFlatName[degree.mod(12)];
+}
+
+export function getNumberSharpName(degree) {
+    return noteData.numberSharpName[degree.mod(12)]  ;
+}
+
+export function getNumberFlatName(degree) {
+    return noteData.numberFlatName[degree.mod(12)];
+}
+
+export function getNoteName(degree, selectedNoteType, selectedAccidentalsType, selectedKey) {
     let noteName = "";
     if(selectedNoteType === noteData.noteType.solfege && selectedAccidentalsType === noteData.accidentalsType.sharp ) {
         noteName = noteName + getSharpSolfegeName(degree);
     } else if(selectedNoteType === noteData.noteType.solfege && selectedAccidentalsType === noteData.accidentalsType.flat) {
         noteName = noteName + getFlatSolfegeName(degree);
+    } else if(selectedNoteType === noteData.noteType.english && selectedAccidentalsType === noteData.accidentalsType.sharp) {
+        noteName = noteName + getEnglishSharpName(degree + selectedKey.index);
+    } else if(selectedNoteType === noteData.noteType.english && selectedAccidentalsType === noteData.accidentalsType.flat) {
+        noteName = noteName + getEnglishFlatName(degree + selectedKey.index);
+    } else if(selectedNoteType === noteData.noteType.number && selectedAccidentalsType === noteData.accidentalsType.sharp) {
+        noteName = noteName + getNumberSharpName(degree);
+    } else if(selectedNoteType === noteData.noteType.number && selectedAccidentalsType === noteData.accidentalsType.flat) {
+        noteName = noteName + getNumberFlatName(degree);
     }
 
     //For each upper octave, add ' at the end

@@ -258,7 +258,7 @@ const StartTraining = () => {
                             onMouseUp={() => setSelectedButton(null)}
                             onClick={() => handleAnswer(item , trainingAnswers, trainingQuestions, seTrainingAnswers)}
                         >
-                            {noteDataUtil.getNoteName(item, "solfege", selectedAccidentalsType)}
+                            {noteDataUtil.getNoteName(item, "solfege", selectedAccidentalsType, selectedKeys[0])}
                         </button>
                     ))}
                 </div>

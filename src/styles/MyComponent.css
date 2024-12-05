@@ -1,5 +1,5 @@
-.note-button {
-    width: 70px;
+  .note-button {
+    width: 80px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -10,7 +10,7 @@
   
   .note-button:hover {
     background-color: blue;
-    color: white;
+    color: #a8e5ec;
   }
   
   .note-button.selected {
@@ -22,3 +22,14 @@
     border: 1px solid black;
     border-collapse: collapse;
   }
+
+  .answer-block {
+    width: 80px;
+    padding: 8px;
+    border: 0px solid #ccc;
+    border-radius: 0px;
+    background-color: white;
+    color: black;
+    transition: background-color 0.3s, color 0.3s;
+  }
+

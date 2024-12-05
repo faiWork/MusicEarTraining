@@ -225,9 +225,18 @@ const StartTraining = () => {
         },
         {
             question: 'Answer:',
-            answer: trainingAnswers.map((item, index) =>
-                noteDataUtil.getNoteName(item, "solfege", selectedAccidentalsType)
-            ).join(", ")
+            answer: 
+                trainingAnswers.map((item, index) => (
+                    <button
+                        key={item}
+                        className={`answer-block`}
+                    >
+                        {noteDataUtil.getNoteName(item, "solfege", selectedAccidentalsType, selectedKeys[0])}
+                        <sup>{"(" + noteDataUtil.getNoteName(item, "english", selectedAccidentalsType, selectedKeys[0]) + ")"}</sup>
+                        {/* <sup>{"(" + noteDataUtil.getNoteName(item, "number", selectedAccidentalsType, selectedKeys[0]) + ")"}</sup> */}
+                    </button>
+                )
+            )
         },
         {
             question: '',
@@ -259,6 +268,8 @@ const StartTraining = () => {
                             onClick={() => handleAnswer(item , trainingAnswers, trainingQuestions, seTrainingAnswers)}
                         >
                             {noteDataUtil.getNoteName(item, "solfege", selectedAccidentalsType, selectedKeys[0])}
+                            <sup>{"(" + noteDataUtil.getNoteName(item, "english", selectedAccidentalsType, selectedKeys[0]) + ")"}</sup>
+                            {/* <sup>{"(" + noteDataUtil.getNoteName(item, "number", selectedAccidentalsType, selectedKeys[0]) + ")"}</sup> */}
                         </button>
                     ))}
                 </div>

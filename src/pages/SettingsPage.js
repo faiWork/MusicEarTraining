@@ -114,7 +114,7 @@ const SettingsPage = () => {
         {
             question: 'Accidentals Type'
             , answer:
-                <button onClick={toggleSelectedAccidentalsType} style={{marginTop: "16px"}}>
+                <button onClick={toggleSelectedAccidentalsType}>
                     {noteDataUtil.getAccidentalsType(selectedAccidentalsType)}
                 </button>
         },

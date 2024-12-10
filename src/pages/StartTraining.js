@@ -47,6 +47,10 @@ const StartTraining = () => {
         generateTrainingQuestions(selectedNoteIndex, numOfAnswers, setTrainingQuestions);
     }, [selectedNoteIndex]);
 
+    const toggleSelectedAccidentalsType = () => {
+        setSelectedAccidentalsType((prevType) => (prevType === noteData.accidentalsType.sharp ? noteData.accidentalsType.flat : noteData.accidentalsType.sharp));
+    };
+
     //Audio functions ================================================
     const pauseNoteFunction = () => {
         // console.log("pauseNoteFunction currentAudio:" + JSON.stringify(currentAudio))
@@ -173,6 +177,13 @@ const StartTraining = () => {
         {
             question: 'Key:',
             answer: selectedKeys[0].selectedKey
+        },
+        {
+            question: 'Accidentals Type'
+            , answer:
+                <button onClick={toggleSelectedAccidentalsType}>
+                    {noteDataUtil.getAccidentalsType(selectedAccidentalsType)}
+                </button>
         },
         {
             question: 'Sound:',

@@ -156,7 +156,7 @@ const SettingsPage = () => {
             <select
                 value={selectedLargestInterval}
                 onChange={(e) => {
-                    setSelectedLargestInterval(e.target.value);
+                    setSelectedLargestInterval(parseInt(e.target.value));
                 }}
             >
               {noteData.intervalFullName.map((key, index) => (

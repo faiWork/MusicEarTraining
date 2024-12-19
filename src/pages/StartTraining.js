@@ -265,7 +265,7 @@ const StartTraining = () => {
                     <button id="eraseButton" onClick={() => eraseAnswerFunction(trainingAnswers, seTrainingAnswers)}>Erase</button>
                     <button id="eraseAllButton" onClick={() => eraseAllAnswerFunction(seTrainingAnswers)}>Erase All</button>
                     <button id="finalAnswerButton" disabled={trainingAnswers.length !== trainingQuestions.length} onClick={() => checkFinalAnswerFunction(trainingQuestions, trainingAnswers, setFinalAnswerResponseMessage, setShowNextQuestionButton)}>Final Answer</button>
-                    {showNextQuestionButton && (<button onClick={() => handleNextQuestion(selectedNoteIndex, numOfAnswers, setTrainingQuestions, seTrainingAnswers, setShowNextQuestionButton, setFinalAnswerResponseMessage, setCurrentQuestionIndex, currentQuestionIndex)}>Next Question</button>)}
+                    {showNextQuestionButton && (<button onClick={() => handleNextQuestion(selectedNoteIndex, numOfAnswers, setTrainingQuestions, selectedLargestInterval, seTrainingAnswers, setShowNextQuestionButton, setFinalAnswerResponseMessage, setCurrentQuestionIndex, currentQuestionIndex)}>Next Question</button>)}
                 </div>
         },
         {

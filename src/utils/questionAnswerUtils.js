@@ -1,43 +1,38 @@
-export const generateTrainingQuestions = (selectedNoteIndex, numOfAnswers, setTrainingQuestions) => {
+export const generateTrainingQuestions = (selectedNoteIndex, numOfAnswers, setTrainingQuestions, selectedLargestInterval) => {
     const randomQuestions = [];
+    let previousQuestion = null;
+    let nextSelectedNoteIndex = [];
+
+    console.log("selectedLargestInterval: " + parseInt(selectedLargestInterval));
 
     for (let i = 0; i < numOfAnswers; i++) {
-        const randomIndex = Math.floor(Math.random() * selectedNoteIndex.length);
-        randomQuestions.push(selectedNoteIndex[randomIndex]);
+        if(previousQuestion != null){
+            nextSelectedNoteIndex = [];
+            for (let j = 0; j < selectedNoteIndex.length; j++) {
+                console.log("Math.abs(previousQuestion - (selectedNoteIndex[j])): " + Math.abs(previousQuestion - (selectedNoteIndex[j])));
+                if(Math.abs(previousQuestion - (selectedNoteIndex[j])) <= selectedLargestInterval){
+                    nextSelectedNoteIndex.push(selectedNoteIndex[j]);
+                }
+            }
+        }else{
+            nextSelectedNoteIndex = [...selectedNoteIndex];
+        }
+
+        console.log("nextSelectedNoteIndex: " + nextSelectedNoteIndex);
+
+        if(nextSelectedNoteIndex.length <= 1){//prevent the next note only have one or no choice because of the selectedLargestInterval
+            nextSelectedNoteIndex = [...selectedNoteIndex];
+        }
+
+        const randomIndex = Math.floor(Math.random() * nextSelectedNoteIndex.length);
+        
+        randomQuestions.push(nextSelectedNoteIndex[randomIndex]);
+        previousQuestion = nextSelectedNoteIndex[randomIndex];
+
     }
 
     setTrainingQuestions(randomQuestions);
-};
-
-// export const generateTrainingQuestions = (selectedNoteIndex, numOfAnswers, setTrainingQuestions, selectedLargestInterval) => {
-//     const randomQuestions = [];
-//     const previousQuestion = null;
-//     const nextSelectedNoteIndex = [];
-
-//     for (let i = 0; i < numOfAnswers; i++) {
-//         if(previousQuestion != null){
-//             for (let j = 0; j < selectedNoteIndex.length; j++) {
-//                 if(Math.abs(previousQuestion - selectedNoteIndex[j]) <= selectedLargestInterval){
-//                     nextSelectedNoteIndex.push(selectedNoteIndex[j]);
-//                 }
-//             }
-//         }else{
-//             nextSelectedNoteIndex = selectedNoteIndex;
-//         }
-
-//         if(nextSelectedNoteIndex.length <= 0){//prevent the next note only have one choice because of the selectedLargestInterval
-//             nextSelectedNoteIndex = selectedNoteIndex;
-//         }
-
-//         const randomIndex = Math.floor(Math.random() * nextSelectedNoteIndex.length);
-        
-//         randomQuestions.push(nextSelectedNoteIndex[randomIndex]);
-//         previousQuestion = nextSelectedNoteIndex[randomIndex];
-
-//     }
-
-//     setTrainingQuestions(randomQuestions);
-// }
+}
 
 export const eraseAnswerFunction = (trainingAnswers, seTrainingAnswers) => {
     const updatedTrainingAnswers = [...trainingAnswers];
@@ -58,8 +53,8 @@ export const checkFinalAnswerFunction = (trainingQuestions, trainingAnswers, set
     }
 };
 
-export const handleNextQuestion = (selectedNoteIndex, numOfAnswers, setTrainingQuestions, seTrainingAnswers, setShowNextQuestionButton, setFinalAnswerResponseMessage, setCurrentQuestionIndex, currentQuestionIndex) => {
-    generateTrainingQuestions(selectedNoteIndex, numOfAnswers, setTrainingQuestions);
+export const handleNextQuestion = (selectedNoteIndex, numOfAnswers, setTrainingQuestions, selectedLargestInterval, seTrainingAnswers, setShowNextQuestionButton, setFinalAnswerResponseMessage, setCurrentQuestionIndex, currentQuestionIndex) => {
+    generateTrainingQuestions(selectedNoteIndex, numOfAnswers, setTrainingQuestions, selectedLargestInterval);
     seTrainingAnswers([]);
     setShowNextQuestionButton(false);
     setFinalAnswerResponseMessage("");

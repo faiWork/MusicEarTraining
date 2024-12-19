@@ -22,7 +22,9 @@ const StartTraining = () => {
         setNumOfQuestions,
         numOfAnswers,
         setNumOfAnswers,
-        selectedKeys
+        selectedKeys,
+        selectedLargestInterval,
+        setSelectedLargestInterval
     } = useContext(AppContext);
     const [selectedButton, setSelectedButton] = useState([]);
     const [trainingQuestions, setTrainingQuestions] = useState([]);
@@ -44,7 +46,7 @@ const StartTraining = () => {
     let audioElements = [];
 
     useEffect(() => {
-        generateTrainingQuestions(selectedNoteIndex, numOfAnswers, setTrainingQuestions);
+        generateTrainingQuestions(selectedNoteIndex, numOfAnswers, setTrainingQuestions, selectedLargestInterval);
     }, [selectedNoteIndex]);
 
     const toggleSelectedAccidentalsType = () => {
@@ -296,6 +298,7 @@ const StartTraining = () => {
             {<h3>{"debug selectedNoteIndex:" + selectedNoteIndex.join(", ")}</h3>}
             {<h3>{"debug selectedAccidentalsType:" + selectedAccidentalsType}</h3>}
             <h3>{"debug selectedKeys:" + JSON.stringify(selectedKeys)}</h3>
+            <h3>{"debug selectedLargestInterval:" + JSON.stringify(selectedLargestInterval)}</h3>
             
 
             <button onClick={() => goToPage("/settings")}>Back</button>

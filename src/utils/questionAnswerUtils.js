@@ -9,6 +9,36 @@ export const generateTrainingQuestions = (selectedNoteIndex, numOfAnswers, setTr
     setTrainingQuestions(randomQuestions);
 };
 
+// export const generateTrainingQuestions = (selectedNoteIndex, numOfAnswers, setTrainingQuestions, selectedLargestInterval) => {
+//     const randomQuestions = [];
+//     const previousQuestion = null;
+//     const nextSelectedNoteIndex = [];
+
+//     for (let i = 0; i < numOfAnswers; i++) {
+//         if(previousQuestion != null){
+//             for (let j = 0; j < selectedNoteIndex.length; j++) {
+//                 if(Math.abs(previousQuestion - selectedNoteIndex[j]) <= selectedLargestInterval){
+//                     nextSelectedNoteIndex.push(selectedNoteIndex[j]);
+//                 }
+//             }
+//         }else{
+//             nextSelectedNoteIndex = selectedNoteIndex;
+//         }
+
+//         if(nextSelectedNoteIndex.length <= 0){//prevent the next note only have one choice because of the selectedLargestInterval
+//             nextSelectedNoteIndex = selectedNoteIndex;
+//         }
+
+//         const randomIndex = Math.floor(Math.random() * nextSelectedNoteIndex.length);
+        
+//         randomQuestions.push(nextSelectedNoteIndex[randomIndex]);
+//         previousQuestion = nextSelectedNoteIndex[randomIndex];
+
+//     }
+
+//     setTrainingQuestions(randomQuestions);
+// }
+
 export const eraseAnswerFunction = (trainingAnswers, seTrainingAnswers) => {
     const updatedTrainingAnswers = [...trainingAnswers];
     updatedTrainingAnswers.pop();

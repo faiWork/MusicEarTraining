@@ -19,7 +19,9 @@ const SettingsPage = () => {
         numOfAnswers,
         setNumOfAnswers,
         selectedKeys,
-        setSelectedKeys
+        setSelectedKeys,
+        selectedLargestInterval,
+        setSelectedLargestInterval
     } = useContext(AppContext);
 
     const { goToPageWithOptions } = usePageNavigation();
@@ -150,7 +152,20 @@ const SettingsPage = () => {
         },
         {
           question: 'Largest Interval'
-          , answer: ''
+          , answer: (
+            <select
+                value={selectedLargestInterval}
+                onChange={(e) => {
+                    setSelectedLargestInterval(e.target.value);
+                }}
+            >
+              {noteData.intervalFullName.map((key, index) => (
+                <option key={key} value={index}>
+                  {key}
+                </option>
+              ))}
+            </select>
+          )
         },
         {
           question: 'Start with Root Note'
@@ -168,6 +183,7 @@ const SettingsPage = () => {
             <QATable title="Melody Dictation Setting" initialQuestions={initialQuestions} headers={headers}/>
 
             <h3>{"debug selectedKeys:" + JSON.stringify(selectedKeys)}</h3>
+            <h3>{"debug selectedLargestInterval:" + JSON.stringify(selectedLargestInterval)}</h3>
             {/*<h3>{"debug selectedNoteIndex:" + selectedNoteIndex}</h3>*/}
             {/*<h3>{"debug selectedAccidentalsType:" + selectedAccidentalsType}</h3>*/}
             {/*<h3>{"debug noteChoiceIndex to name:" +*/}

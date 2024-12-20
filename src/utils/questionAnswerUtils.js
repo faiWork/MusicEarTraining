@@ -9,7 +9,7 @@ export const generateTrainingQuestions = (selectedNoteIndex, numOfAnswers, setTr
         if(previousQuestion != null){
             nextSelectedNoteIndex = [];
             for (let j = 0; j < selectedNoteIndex.length; j++) {
-                console.log("Math.abs(previousQuestion - (selectedNoteIndex[j])): " + Math.abs(previousQuestion - (selectedNoteIndex[j])));
+                // console.log("Math.abs(previousQuestion - (selectedNoteIndex[j])): " + Math.abs(previousQuestion - (selectedNoteIndex[j])));
                 if(Math.abs(previousQuestion - (selectedNoteIndex[j])) <= selectedLargestInterval){
                     nextSelectedNoteIndex.push(selectedNoteIndex[j]);
                 }
@@ -18,11 +18,11 @@ export const generateTrainingQuestions = (selectedNoteIndex, numOfAnswers, setTr
             nextSelectedNoteIndex = [...selectedNoteIndex];
         }
 
-        console.log("nextSelectedNoteIndex: " + nextSelectedNoteIndex);
+        // console.log("nextSelectedNoteIndex: " + nextSelectedNoteIndex);
 
-        if(nextSelectedNoteIndex.length <= 1){//prevent the next note only have one or no choice because of the selectedLargestInterval
-            nextSelectedNoteIndex = [...selectedNoteIndex];
-        }
+        // if(nextSelectedNoteIndex.length <= 1){//prevent the next note only have one or no choice because of the selectedLargestInterval
+        //     nextSelectedNoteIndex = [...selectedNoteIndex];
+        // }
 
         const randomIndex = Math.floor(Math.random() * nextSelectedNoteIndex.length);
         

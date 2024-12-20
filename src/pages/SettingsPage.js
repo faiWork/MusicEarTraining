@@ -48,6 +48,39 @@ const SettingsPage = () => {
         setSelectedAccidentalsType((prevType) => (prevType === noteData.accidentalsType.sharp ? noteData.accidentalsType.flat : noteData.accidentalsType.sharp));
     };
 
+    const startTrainingValidation = () => {
+        // console.log("selectedLargestInterval: " + selectedLargestInterval);
+
+        if(selectedNoteIndex.length < 2){
+            alert("You must at least select 2 notes.");
+            return false;
+        }else if(selectedNoteIndex.length >= 2){//check any note pairs exceed the Selected Largest Interval
+            let previousQuestion = selectedNoteIndex[0];
+            let notePairsExceedLargestInterval = [];
+            
+            for (let j = 0; j < selectedNoteIndex.length; j++) {
+                // console.log("Math.abs(previousQuestion - (selectedNoteIndex[j])): " + Math.abs(previousQuestion - (selectedNoteIndex[j])));
+                // console.log("Math.abs(previousQuestion - (selectedNoteIndex[j])) > selectedLargestInterval: " +Math.abs(previousQuestion - (selectedNoteIndex[j])) > selectedLargestInterval);
+                if(Math.abs(previousQuestion - (selectedNoteIndex[j])) > selectedLargestInterval){
+                    notePairsExceedLargestInterval.push(
+                        noteDataUtil.getNoteName(previousQuestion, 'solfege', selectedAccidentalsType) + " and " 
+                        + noteDataUtil.getNoteName(selectedNoteIndex[j], 'solfege', selectedAccidentalsType) 
+                        + " are larger than " + noteDataUtil.getIntervalFullName(selectedLargestInterval) + ".\n");
+                }
+
+                previousQuestion = selectedNoteIndex[j];
+            }
+
+            if(notePairsExceedLargestInterval.length > 0){
+                alert(notePairsExceedLargestInterval);
+                return false;
+            }
+
+        }
+
+        return true;
+    }
+
     const headers = ["Setting", "Choice"];
 
     const MIN_QUESTIONS = 1;
@@ -184,7 +217,7 @@ const SettingsPage = () => {
 
             <h3>{"debug selectedKeys:" + JSON.stringify(selectedKeys)}</h3>
             <h3>{"debug selectedLargestInterval:" + JSON.stringify(selectedLargestInterval)}</h3>
-            {/*<h3>{"debug selectedNoteIndex:" + selectedNoteIndex}</h3>*/}
+            <h3>{"debug selectedNoteIndex:" + selectedNoteIndex}</h3>
             {/*<h3>{"debug selectedAccidentalsType:" + selectedAccidentalsType}</h3>*/}
             {/*<h3>{"debug noteChoiceIndex to name:" +*/}
             {/*    noteChoiceIndex.map((item, index) => {*/}
@@ -192,7 +225,7 @@ const SettingsPage = () => {
             {/*    })*/}
             {/*}</h3>*/}
 
-          <button onClick={() => goToPageWithOptions("/start-training", { state: { selectedNoteIndex, selectedAccidentalsType, numOfQuestions, numOfAnswers, selectedKeys} })} style={{marginTop: "16px"}}>
+          <button onClick={() => startTrainingValidation() && goToPageWithOptions("/start-training", { state: { selectedNoteIndex, selectedAccidentalsType, numOfQuestions, numOfAnswers, selectedKeys} })} style={{marginTop: "16px"}}>
               Start Training
           </button>
       </Layout>

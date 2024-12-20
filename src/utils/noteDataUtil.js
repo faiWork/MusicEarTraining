@@ -43,6 +43,18 @@ export function getNumberFlatName(degree) {
     return noteData.numberFlatName[degree.mod(12)];
 }
 
+export function getIntervalLongName(degree) {
+    return noteData.intervalLongName[degree.mod(12)];
+}
+
+export function getIntervalShortName(degree) {
+    return noteData.intervalShortName[degree.mod(12)];
+}
+
+export function getIntervalFullName(degree) {
+    return noteData.intervalFullName[degree.mod(12)];
+}
+
 export function getNoteName(degree, selectedNoteType, selectedAccidentalsType, selectedKey) {
     let noteName = "";
     if(selectedNoteType === noteData.noteType.solfege && selectedAccidentalsType === noteData.accidentalsType.sharp ) {

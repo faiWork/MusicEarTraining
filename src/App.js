@@ -17,6 +17,7 @@ const App = () => {
   const [numOfAnswers, setNumOfAnswers] = useState([5]);
   const [selectedKeys, setSelectedKeys] = useState([{"index": 0, "selectedKey": 0, "keyRootNoteIndex": -1}]);
   const [selectedLargestInterval, setSelectedLargestInterval] = useState(12);
+  const [startWithRootNote, setStartWithRootNote] = useState(true);
 
   return (
     <AppContext.Provider
@@ -32,7 +33,9 @@ const App = () => {
         selectedKeys,
         setSelectedKeys,
         selectedLargestInterval,
-        setSelectedLargestInterval
+        setSelectedLargestInterval,
+        startWithRootNote,
+        setStartWithRootNote
       }}
     >
       <Router>

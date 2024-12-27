@@ -21,7 +21,9 @@ const SettingsPage = () => {
         selectedKeys,
         setSelectedKeys,
         selectedLargestInterval,
-        setSelectedLargestInterval
+        setSelectedLargestInterval,
+        startWithRootNote,
+        setStartWithRootNote
     } = useContext(AppContext);
 
     const { goToPageWithOptions } = usePageNavigation();
@@ -46,6 +48,10 @@ const SettingsPage = () => {
 
     const toggleSelectedAccidentalsType = () => {
         setSelectedAccidentalsType((prevType) => (prevType === noteData.accidentalsType.sharp ? noteData.accidentalsType.flat : noteData.accidentalsType.sharp));
+    };
+
+    const toggleStartWithRootNote = () => {
+        setStartWithRootNote((prevType) => (prevType === true ? false : true));
     };
 
     const startTrainingValidation = () => {
@@ -202,7 +208,10 @@ const SettingsPage = () => {
         },
         {
           question: 'Start with Root Note'
-          , answer: ''
+          , answer: 
+                <button onClick={toggleStartWithRootNote}>
+                    {startWithRootNote ? "Yes" : "No"}
+                </button>
         },
         {
           question: 'Tempo'

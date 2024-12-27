@@ -24,7 +24,9 @@ const StartTraining = () => {
         setNumOfAnswers,
         selectedKeys,
         selectedLargestInterval,
-        setSelectedLargestInterval
+        setSelectedLargestInterval,
+        startWithRootNote,
+        setStartWithRootNote
     } = useContext(AppContext);
     const [selectedButton, setSelectedButton] = useState([]);
     const [trainingQuestions, setTrainingQuestions] = useState([]);
@@ -46,7 +48,7 @@ const StartTraining = () => {
     let audioElements = [];
 
     useEffect(() => {
-        generateTrainingQuestions(selectedNoteIndex, numOfAnswers, setTrainingQuestions, selectedLargestInterval);
+        generateTrainingQuestions(selectedNoteIndex, numOfAnswers, setTrainingQuestions, selectedLargestInterval, startWithRootNote);
     }, [selectedNoteIndex]);
 
     const toggleSelectedAccidentalsType = () => {
@@ -265,7 +267,7 @@ const StartTraining = () => {
                     <button id="eraseButton" onClick={() => eraseAnswerFunction(trainingAnswers, seTrainingAnswers)}>Erase</button>
                     <button id="eraseAllButton" onClick={() => eraseAllAnswerFunction(seTrainingAnswers)}>Erase All</button>
                     <button id="finalAnswerButton" disabled={trainingAnswers.length !== trainingQuestions.length} onClick={() => checkFinalAnswerFunction(trainingQuestions, trainingAnswers, setFinalAnswerResponseMessage, setShowNextQuestionButton)}>Final Answer</button>
-                    {showNextQuestionButton && (<button onClick={() => handleNextQuestion(selectedNoteIndex, numOfAnswers, setTrainingQuestions, selectedLargestInterval, seTrainingAnswers, setShowNextQuestionButton, setFinalAnswerResponseMessage, setCurrentQuestionIndex, currentQuestionIndex)}>Next Question</button>)}
+                    {showNextQuestionButton && (<button onClick={() => handleNextQuestion(selectedNoteIndex, numOfAnswers, setTrainingQuestions, selectedLargestInterval, seTrainingAnswers, setShowNextQuestionButton, setFinalAnswerResponseMessage, setCurrentQuestionIndex, currentQuestionIndex, startWithRootNote)}>Next Question</button>)}
                 </div>
         },
         {
@@ -299,6 +301,7 @@ const StartTraining = () => {
             {<h3>{"debug selectedAccidentalsType:" + selectedAccidentalsType}</h3>}
             <h3>{"debug selectedKeys:" + JSON.stringify(selectedKeys)}</h3>
             <h3>{"debug selectedLargestInterval:" + JSON.stringify(selectedLargestInterval)}</h3>
+            <h3>{"debug startWithRootNote:" + JSON.stringify(startWithRootNote)}</h3>
             
 
             <button onClick={() => goToPage("/settings")}>Back</button>
